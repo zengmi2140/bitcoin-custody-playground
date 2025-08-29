@@ -1,73 +1,93 @@
-# Welcome to your Lovable project
+# 比特币自主托管交互网站 - 移植指南
 
-## Project info
+## 📋 项目信息
+- **技术栈**: React + TypeScript
+- **构建工具**: Create React App
+- **依赖管理**: npm
 
-**URL**: https://lovable.dev/projects/fe863df5-84ca-4696-b218-be48dc90bb98
+## 🚀 快速开始
 
-## How can I edit this code?
+### 1. 环境要求
+- Node.js 16+ 
+- npm 或 yarn
 
-There are several ways of editing your application.
+### 2. 安装步骤
+```bash
+# 安装依赖
+npm install
 
-**Use Lovable**
+# 启动开发服务器
+npm start
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/fe863df5-84ca-4696-b218-be48dc90bb98) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+# 构建生产版本
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+### 3. 目录结构
+```
+bitcoin-custody-website/
+├── public/          # 静态文件
+├── src/             # 源代码
+│   ├── components/  # React组件
+│   ├── types.ts     # TypeScript类型定义
+│   ├── data.ts      # 组件数据
+│   └── App.tsx      # 主应用组件
+├── build/           # 构建输出（运行npm run build后生成）
+└── package.json     # 项目配置
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📝 在不同编辑器中使用
 
-**Use GitHub Codespaces**
+### VS Code
+1. File -> Open Folder -> 选择项目文件夹
+2. 安装推荐插件：ES7+ React/Redux/React-Native snippets
+3. 终端中运行 `npm install` 和 `npm start`
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### WebStorm/IntelliJ IDEA
+1. File -> Open -> 选择项目文件夹
+2. WebStorm会自动识别React项目
+3. 使用内置终端运行npm命令
 
-## What technologies are used for this project?
+### Sublime Text
+1. File -> Open Folder -> 选择项目文件夹
+2. 安装Package Control和React相关插件
+3. 使用外部终端运行npm命令
 
-This project is built with:
+### Atom
+1. File -> Add Project Folder -> 选择项目文件夹
+2. 安装相关React语法高亮插件
+3. 使用终端面板运行npm命令
 
-- Vite
+## 🌐 部署选项
+
+### 静态网站托管
+- **GitHub Pages**: 免费托管
+- **Vercel**: 一键部署
+- **Netlify**: 支持持续集成
+
+### 本地服务器
+```bash
+# 全局安装serve
+npm install -g serve
+
+# 运行生产版本
+serve -s build
+```
+
+## 🔧 自定义配置
+
+项目使用标准的Create React App配置，支持：
 - TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- CSS Modules
+- 热重载
+- 自动代码分割
 
-## How can I deploy this project?
+## 📞 技术支持
 
-Simply open [Lovable](https://lovable.dev/projects/fe863df5-84ca-4696-b218-be48dc90bb98) and click on Share -> Publish.
+如果在移植过程中遇到问题：
+1. 确认Node.js版本 >= 16
+2. 清除npm缓存: `npm cache clean --force`
+3. 删除node_modules并重新安装: `rm -rf node_modules && npm install`
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+项目已配置完整的开发环境，可以直接在任何支持React的编辑器中使用。
