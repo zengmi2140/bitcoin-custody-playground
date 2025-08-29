@@ -6,7 +6,7 @@ import { componentTagger } from "lovable-tagger"
 export default defineConfig(({ mode }) => ({
   plugins: [
     react({
-      // Disable TypeScript checking to avoid build conflicts
+      // Completely disable TypeScript to avoid build conflicts
       typescript: false
     }),
     mode === 'development' && componentTagger(),
