@@ -5,10 +5,7 @@ import { componentTagger } from "lovable-tagger"
 
 export default defineConfig(({ mode }) => ({
   plugins: [
-    react({
-      // Completely disable TypeScript to avoid build conflicts
-      typescript: false
-    }),
+    react(),
     mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {
@@ -23,21 +20,13 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    // Disable TypeScript checking during build
-    skipDiagnostics: true,
+    target: 'esnext',
     rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
+      input: {
+        main: path.resolve(__dirname, 'index.html')
+      }
+    }
   },
-  esbuild: {
-    target: 'es2020',
-    // Completely bypass TypeScript checking to avoid tsconfig conflicts
-    loader: 'tsx',
-    include: /\.(tsx?|jsx?)$/,
-  },
-  // 禁用 TypeScript 检查，让 esbuild 处理
   define: {
     global: 'globalThis',
   },
