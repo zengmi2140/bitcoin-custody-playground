@@ -9,6 +9,18 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
+  esbuild: {
+    target: 'es2020',
+  },
+  // 禁用 TypeScript 检查，让 esbuild 处理
+  define: {
+    global: 'globalThis',
   },
 })
