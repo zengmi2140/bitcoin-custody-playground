@@ -4,6 +4,7 @@ import Header from './components/Header';
 import MainLayout from './components/MainLayout';
 import InitialGuide from './components/InitialGuide';
 import './index.css';
+import './App.css';
 
 interface AppState {
   selectedSigners: string[];
