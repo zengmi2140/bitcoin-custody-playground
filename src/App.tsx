@@ -3,7 +3,7 @@ import { UserPreference, ComponentState, CustodyData } from './types';
 import Header from './components/Header';
 import MainLayout from './components/MainLayout';
 import InitialGuide from './components/InitialGuide';
-import './App.css';
+import './index.css';
 
 interface AppState {
   selectedSigners: string[];
