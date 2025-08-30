@@ -29,7 +29,7 @@ body {
 }
 
 .header-content {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
@@ -54,7 +54,7 @@ body {
 /* 右上角按钮区域 */
 .header-actions {
   position: absolute;
-  right: 20px;
+  right: -200px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -235,7 +235,7 @@ body {
 .main-layout {
   flex: 1;
   padding: 40px 20px;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   width: 100%;
 }
@@ -260,7 +260,7 @@ body {
 }
 
 .layout-container.three-column {
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: 1fr auto 1fr auto 1fr;
 }
 
 .layout-container.two-column {
@@ -274,7 +274,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   padding: 0;
-  width: 180px; min-width: 180px; /* 固定较宽距离，为传输标签预留空间 */
+  min-width: 180px; /* 固定较宽距离，为传输标签预留空间 */
   gap: 40px;
   height: 100%;
   position: relative;
@@ -285,7 +285,7 @@ body {
 /* 桌面端优化 - 更宽的间距和箭头连接线 */
 @media (min-width: 769px) {
   .data-flow {
-    width: 200px; min-width: 200px; /* 桌面端较宽距离，保持对称 */
+    min-width: 220px; /* 桌面端较宽距离，保持对称 */
     gap: 30px;
     /* 桌面端更精确的对齐: 列标题 + gap + 组件网格中心 */
     padding-top: calc(1.4rem + 10px + 20px + 140px); /* 约为112px */
@@ -939,72 +939,3 @@ body {
     max-width: 250px;
   }
 }
-
-/* 确保组件列在网格中居中 */
-.component-column {
-  justify-self: center;
-  width: 100%;
-  max-width: 400px;
-}
-
-/* 优化数据流箭头的居中效果 */
-.data-flow {
-  justify-self: center;
-}
-
-/* 确保整个布局容器居中 */
-.main-layout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* 响应式布局优化 */
-@media (min-width: 1200px) {
-  .layout-container.three-column {
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-}
-
-
-/* 精确布局居中控制 - 确保左右空白区域完全相等 */
-.layout-container.three-column {
-  justify-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* 确保组件列在网格中精确居中 */
-.component-column {
-  justify-self: center;
-  width: 100%;
-  max-width: 380px;
-}
-
-/* 数据流箭头精确居中 */
-.data-flow {
-  justify-self: center;
-  width: 180px;
-}
-
-/* 桌面端数据流箭头宽度 */
-@media (min-width: 769px) {
-  .data-flow {
-    width: 200px;
-  }
-}
-
-/* 大屏幕下的额外居中保证 */
-@media (min-width: 1200px) {
-  .layout-container.three-column {
-    max-width: 1400px;
-  }
-  
-  .component-column {
-    max-width: 400px;
-  }
-}
-
