@@ -54,13 +54,17 @@ body {
 /* 右上角按钮区域 */
 .header-actions {
   position: absolute;
-  right: 20px;
+  /* 定位到页面右侧，与区块链节点列右边界对齐 */
+  right: 20px; /* 相对于header-content的右边界 */
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   gap: 12px;
   z-index: 10;
+  
+  /* 向右移动100px看看效果 */
+  margin-right: -100px;
 }
 
 /* 单签/多签切换按钮 */
@@ -1047,6 +1051,8 @@ body {
 }
 
 /* 响应式布局优化 */
+
+
 @media (min-width: 1200px) {
   .layout-container.three-column {
     max-width: 1400px;
@@ -1092,6 +1098,18 @@ body {
   
   .component-column {
     max-width: 400px;
+  }
+  
+  /* 大屏幕下按钮与400px列宽对齐 */
+  .header-actions {
+    right: 20px; /* 保持右上角位置 */
+  }
+}
+
+/* 中等屏幕下按钮与380px列宽对齐 */
+@media (min-width: 769px) and (max-width: 1199px) {
+  .header-actions {
+    right: 20px; /* 保持右上角位置 */
   }
 }
 
