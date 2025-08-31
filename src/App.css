@@ -63,8 +63,8 @@ body {
   gap: 12px;
   z-index: 10;
   
-  /* 向右移动100px看看效果 */
-  margin-right: -100px;
+  /* 向左移动50px */
+  margin-right: -50px;
 }
 
 /* 单签/多签切换按钮 */
@@ -152,7 +152,7 @@ body {
 .celebration-emoji {
   position: absolute;
   top: 50%;
-  left: calc(120% - 45px); /* 向左移动60px：从+15px改为-45px */
+  left: calc(120% - 75px); /* 向左移动30px：从-45px改为-75px */
   transform: translateY(-50%);
   font-size: 28px;
   animation: celebrationBlink 3s ease-in-out;
@@ -1072,6 +1072,9 @@ body {
   
   /* 确保Grid项目正确对齐 */
   grid-auto-flow: row;
+  
+  /* 补偿箭头区域的向右偏移，让整体布局视觉居中 */
+  margin-left: -55px;
 }
 
 /* 确保组件列在网格中精确居中 */
@@ -1103,6 +1106,11 @@ body {
   /* 大屏幕下按钮与400px列宽对齐 */
   .header-actions {
     right: 20px; /* 保持右上角位置 */
+  }
+  
+  /* 大屏幕下也补偿箭头偏移，保持视觉居中 */
+  .layout-container.three-column {
+    margin-left: -55px;
   }
 }
 
