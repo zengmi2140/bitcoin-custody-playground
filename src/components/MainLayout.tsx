@@ -124,7 +124,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           
           {/* 占位符区域 - 与左侧传输标签区域保持一致的视觉效果 */}
           <div className="transfer-methods placeholder">
-            <div className="placeholder-content">占位区域</div>
+            {/* 占位区域标签已隐藏，仅保留占位空间 */}
           </div>
           
           <div className="flow-arrow left-arrow">
