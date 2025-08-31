@@ -356,8 +356,8 @@ body {
   content: '';
   position: absolute;
   top: 50%;
-  left: 0px;  /* 不延伸到组件列表 */
-  right: 0px; /* 不延伸到组件列表 */
+  left: 15px;  /* 缩短箭头长度，增加视觉缓冲空间 */
+  right: 15px; /* 缩短箭头长度，增加视觉缓冲空间 */
   height: 4px;
   background: linear-gradient(90deg, transparent 0%, #059669 10%, transparent 20%, #059669 30%, transparent 40%, #059669 50%, transparent 60%, #059669 70%, transparent 80%, #059669 90%, transparent 100%);
   background-size: 30px 4px;
@@ -381,7 +381,7 @@ body {
   content: '';
   position: absolute;
   top: 50%;
-  right: 0px; /* 不延伸到组件列表 */
+  right: 15px; /* 与连接线保持一致，增加视觉缓冲空间 */
   width: 0;
   height: 0;
   border-left: 20px solid #059669;
@@ -393,7 +393,7 @@ body {
 
 /* 左向箭头的特殊样式 */
 .flow-arrow.left-arrow::before {
-  left: 0px;  /* 不延伸到组件列表 */
+  left: 15px;  /* 与连接线保持一致，增加视觉缓冲空间 */
   right: auto;
   border-left: none;
   border-right: 20px solid #059669;
@@ -402,8 +402,8 @@ body {
 /* 桌面端适度延长箭头 */
 @media (min-width: 769px) {
   .flow-arrow::after {
-    left: 0px;  /* 不延伸到组件列表 */
-    right: 0px; /* 不延伸到组件列表 */
+    left: 20px;  /* 桌面端使用更大的缓冲空间 */
+    right: 20px; /* 桌面端使用更大的缓冲空间 */
     background-size: 40px 4px;
     top: 50%;
   }
@@ -418,12 +418,12 @@ body {
   }
   
   .flow-arrow::before {
-    right: 0px; /* 不延伸到组件列表 */
+    right: 20px; /* 桌面端使用更大的缓冲空间 */
     top: 50%;
   }
   
   .flow-arrow.left-arrow::before {
-    left: 0px;  /* 不延伸到组件列表 */
+    left: 20px;  /* 桌面端使用更大的缓冲空间 */
     right: auto;
   }
 }
