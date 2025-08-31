@@ -285,7 +285,7 @@ body {
   min-height: 300px !important;
   max-height: 300px !important;
   position: relative !important;
-  left: 55px !important; /* 将箭头区域整体向右移动55px，避免与左侧组件重叠 */
+  left: 55px !important; /* 恢复left偏移，避免箭头延伸进左侧组件 */
   /* 计算对齐位置: 列标题(1.4rem + 10px) + gap(20px) + 组件网格中心位置 */
   padding-top: calc(1.4rem + 10px + 20px + 120px) !important; /* 约等92px */
 
@@ -317,7 +317,7 @@ body {
     height: 320px !important; /* 桌面端强制固定高度，确保左右区域完全一致 */
     min-height: 320px !important;
     max-height: 320px !important;
-    left: 55px !important; /* 桌面端也向右移动55px，保持一致性 */
+    left: 55px !important; /* 桌面端也恢复left偏移，保持箭头正确位置 */
   }
   
   /* 包含传输标签的箭头区域 - 桌面端 */
@@ -356,8 +356,8 @@ body {
   content: '';
   position: absolute;
   top: 50%;
-  left: 15px;  /* 缩短箭头长度，增加视觉缓冲空间 */
-  right: 15px; /* 缩短箭头长度，增加视觉缓冲空间 */
+  left: var(--arrow-left, 15px);  /* 使用CSS变量，默认值15px */
+  right: var(--arrow-right, 15px); /* 使用CSS变量，默认值15px */
   height: 4px;
   background: linear-gradient(90deg, transparent 0%, #059669 10%, transparent 20%, #059669 30%, transparent 40%, #059669 50%, transparent 60%, #059669 70%, transparent 80%, #059669 90%, transparent 100%);
   background-size: 30px 4px;
@@ -381,7 +381,7 @@ body {
   content: '';
   position: absolute;
   top: 50%;
-  right: 15px; /* 与连接线保持一致，增加视觉缓冲空间 */
+  right: var(--arrow-right, 15px); /* 使用CSS变量，与连接线保持一致 */
   width: 0;
   height: 0;
   border-left: 20px solid #059669;
@@ -393,7 +393,7 @@ body {
 
 /* 左向箭头的特殊样式 */
 .flow-arrow.left-arrow::before {
-  left: 15px;  /* 与连接线保持一致，增加视觉缓冲空间 */
+  left: var(--arrow-left, 15px);  /* 使用CSS变量，与连接线保持一致 */
   right: auto;
   border-left: none;
   border-right: 20px solid #059669;
@@ -403,7 +403,7 @@ body {
 @media (min-width: 769px) {
   .flow-arrow::after {
     left: 20px;  /* 桌面端使用更大的缓冲空间 */
-    right: 20px; /* 桌面端使用更大的缓冲空间 */
+    right: 20px; /* 桌面端虚线精确对齐箭头边界，避免重叠 */
     background-size: 40px 4px;
     top: 50%;
   }
@@ -554,7 +554,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   gap: 20px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 
@@ -564,7 +570,18 @@ body {
   font-weight: 600;
   color: #2d3748;
   text-align: center;
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
+  padding: 0;
+  width: 100%;
+  
+  /* 使用CSS Grid强制居中 */
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr;
+  
+  /* 确保完全居中对齐 */
+  box-sizing: border-box;
+  position: relative;
 }
 
 .components-grid {
@@ -907,6 +924,7 @@ body {
     background-size: 4px 30px;
     animation: flowDashVertical 2s linear infinite;
     transform: translateX(-50%);
+    /* 移动端使用垂直箭头，水平方向的重叠效果不适用 */
   }
   
   /* 移动端垂直流动动画 */
@@ -1017,18 +1035,9 @@ body {
   }
 }
 
-/* 确保组件列在网格中居中 */
-.component-column {
-  justify-self: center;
-  width: 100%;
-  max-width: 400px;
-}
+/* 移除重复定义，已在前面统一定义 */
 
-/* 优化数据流箭头的居中效果 */
-.data-flow {
-  justify-self: center;
-  /* 移除margin-left偏移，确保左右箭头区域完全对称 */
-}
+/* 移除重复的data-flow定义，避免样式冲突 */
 
 /* 确保整个布局容器居中 */
 .main-layout {
@@ -1050,38 +1059,30 @@ body {
 .layout-container.three-column {
   justify-items: center;
   justify-content: center;
+  align-items: start;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  
+  /* 确保Grid项目正确对齐 */
+  grid-auto-flow: row;
 }
 
 /* 确保组件列在网格中精确居中 */
 .component-column {
   justify-self: center;
+  align-self: start;
   width: 100%;
   max-width: 380px;
+  
+  /* 使用CSS Grid确保列内容完全居中 */
+  display: grid;
+  grid-template-rows: auto 1fr;
+  justify-items: center;
+  align-items: start;
 }
 
-/* 最终的宽度统一规则 - 确保左右箭头区域完全一致 */
-.data-flow {
-  width: 300px !important;
-  min-width: 300px !important; 
-  max-width: 300px !important;
-  height: 300px !important;
-  min-height: 300px !important;
-  max-height: 300px !important;
-}
-
-@media (min-width: 769px) {
-  .data-flow {
-    width: 350px !important;
-    min-width: 350px !important;
-    max-width: 350px !important;
-    height: 320px !important;
-    min-height: 320px !important;
-    max-height: 320px !important;
-  }
-}
+/* 移除重复的data-flow宽度定义，已在前面统一设置 */
 
 /* 大屏幕下的额外居中保证 */
 @media (min-width: 1200px) {
