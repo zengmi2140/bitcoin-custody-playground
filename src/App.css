@@ -152,7 +152,7 @@ body {
 .celebration-emoji {
   position: absolute;
   top: 50%;
-  left: calc(120% + 15px);
+  left: calc(120% - 45px); /* 向左移动60px：从+15px改为-45px */
   transform: translateY(-50%);
   font-size: 28px;
   animation: celebrationBlink 3s ease-in-out;
