@@ -300,7 +300,6 @@ body {
   box-sizing: border-box !important;
   overflow: visible !important;
   /* 调试：添加边框显示基础样式是否生效 */
-  border: 2px solid #00ff00 !important;
 }
 
 
@@ -352,8 +351,6 @@ body {
     /* 减少偏移，让内容更居中 */
     left: min(35px, 2.5vw) !important;
     /* 调试：添加边框显示当前样式是否生效 */
-    border: 3px solid #ff0000 !important;
-    background-color: rgba(255, 0, 0, 0.1) !important;
   }
   
   /* 14寸屏幕下减少列间距 */
@@ -375,18 +372,6 @@ body {
 }
 
 /* 通用调试：所有屏幕尺寸下的箭头样式 */
-.data-flow::before {
-  content: '当前宽度: ' attr(style);
-  position: absolute;
-  top: -30px;
-  left: 0;
-  background: #000;
-  color: #fff;
-  padding: 5px;
-  font-size: 12px;
-  z-index: 1000;
-  white-space: nowrap;
-}
 
 /* 强制测试：所有屏幕尺寸下的箭头样式 */
 .data-flow {
@@ -398,16 +383,12 @@ body {
 @media (max-width: 1600px) {
   .data-flow {
     /* 中等屏幕：红色边框 */
-    border: 5px solid #ff0000 !important;
-    background-color: rgba(255, 0, 0, 0.2) !important;
   }
 }
 
 @media (min-width: 1601px) {
   .data-flow {
     /* 超大屏幕：蓝色边框 */
-    border: 5px solid #0000ff !important;
-    background-color: rgba(0, 0, 255, 0.2) !important;
   }
 }
 
