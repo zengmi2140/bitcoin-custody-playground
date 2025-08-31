@@ -109,11 +109,24 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           type="wallet"
         />
         
-        <div className="data-flow">
+        <div 
+          className="data-flow" 
+          style={{
+            height: '300px',
+            minHeight: '300px',
+            maxHeight: '300px'
+          }}
+        >
           <div className="flow-arrow">
             <span className="arrow">→</span>
             <span className="flow-text">地址；已签名交易</span>
           </div>
+          
+          {/* 占位符区域 - 与左侧传输标签区域保持一致的视觉效果 */}
+          <div className="transfer-methods placeholder">
+            <div className="placeholder-content">占位区域</div>
+          </div>
+          
           <div className="flow-arrow left-arrow">
             <span className="arrow">←</span>
             <span className="flow-text">余额信息</span>
