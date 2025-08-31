@@ -85,16 +85,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           </div>
           
           {/* 传输方式标签区域 - 独立分隔两个箭头 */}
-          {transferMethods.length > 0 && (
-            <div className="transfer-methods">
-              {transferMethods.map((method, index) => (
-                <span key={index} className={`transfer-tag ${getTransferMethodClass(method)}`}>
-                  {method}
-                </span>
-              ))}
-            </div>
-          )}
-          
+          {/* 传输方式标签区域 - 始终显示，避免布局跳动 */}
+          <div className="transfer-methods">
+            {transferMethods.map((method, index) => (
+              <span key={index} className={`transfer-tag ${getTransferMethodClass(method)}`}>
+                {method}
+              </span>
+            ))}
+          </div>          
           <div className="flow-arrow left-arrow">
             <span className="arrow">←</span>
             <span className="flow-text">待签名的交易</span>

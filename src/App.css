@@ -274,7 +274,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   padding: 0;
-  width: 180px; min-width: 180px; /* 固定较宽距离，为传输标签预留空间 */
+  width: 240px; min-width: 240px; /* 固定较宽距离，为传输标签预留空间 */
   gap: 40px;
   height: 100%;
   position: relative;
@@ -285,7 +285,7 @@ body {
 /* 桌面端优化 - 更宽的间距和箭头连接线 */
 @media (min-width: 769px) {
   .data-flow {
-    width: 200px; min-width: 200px; /* 桌面端较宽距离，保持对称 */
+    width: 280px; min-width: 280px; /* 桌面端较宽距离，保持对称 */
     gap: 30px;
     /* 桌面端更精确的对齐: 列标题 + gap + 组件网格中心 */
     padding-top: calc(1.4rem + 10px + 20px + 140px); /* 约为112px */
@@ -315,8 +315,8 @@ body {
   content: '';
   position: absolute;
   top: 50%;
-  left: -20px;  /* 缩短延伸距离，从-40px改为-20px */
-  right: -20px; /* 缩短延伸距离，从-40px改为-20px */
+  left: -10px;  /* 进一步缩短延伸距离，避免与组件重叠 */
+  right: -10px; /* 进一步缩短延伸距离，避免与组件重叠 */
   height: 4px;
   background: linear-gradient(90deg, transparent 0%, #059669 10%, transparent 20%, #059669 30%, transparent 40%, #059669 50%, transparent 60%, #059669 70%, transparent 80%, #059669 90%, transparent 100%);
   background-size: 30px 4px;
@@ -340,7 +340,7 @@ body {
   content: '';
   position: absolute;
   top: 50%;
-  right: -20px; /* 从-40px改为-20px，与连接线保持一致 */
+  right: -10px; /* 进一步缩短延伸距离，避免与组件重叠 */
   width: 0;
   height: 0;
   border-left: 20px solid #059669;
@@ -362,7 +362,7 @@ body {
 @media (min-width: 769px) {
   .flow-arrow::after {
     left: -40px;  /* 从-60px改为-40px，缩短延伸距离 */
-    right: -40px; /* 从-60px改为-40px，缩短延伸距离 */
+    right: -20px; /* 桌面端适度缩短延伸距离，缩短延伸距离 */
     background-size: 40px 4px;
     top: 50%;
   }
@@ -377,7 +377,7 @@ body {
   }
   
   .flow-arrow::before {
-    right: -40px; /* 从-60px改为-40px */
+    right: -20px; /* 桌面端适度缩短延伸距离 */
     top: 50%;
   }
   
@@ -406,7 +406,7 @@ body {
   gap: 8px;
   justify-content: center;
   align-items: center;
-  max-width: 200px;
+  max-width: 220px; min-height: 50px;
   margin: 0 auto;
   padding: 15px 16px;
   z-index: 5;
@@ -461,7 +461,7 @@ body {
 /* 桌面端优化 */
 @media (min-width: 769px) {
   .transfer-methods {
-    max-width: 240px;
+    max-width: 240px; min-height: 60px;
     gap: 10px;
     margin: 0 auto;
     padding: 18px 20px;
@@ -950,6 +950,7 @@ body {
 /* 优化数据流箭头的居中效果 */
 .data-flow {
   justify-self: center;
+  margin-left: 40px; /* 向右偏移40px，进一步实现视觉居中 */
 }
 
 /* 确保整个布局容器居中 */
@@ -987,13 +988,13 @@ body {
 /* 数据流箭头精确居中 */
 .data-flow {
   justify-self: center;
-  width: 180px;
+  width: 240px;
 }
 
 /* 桌面端数据流箭头宽度 */
 @media (min-width: 769px) {
   .data-flow {
-    width: 200px;
+    width: 280px;
   }
 }
 
@@ -1007,4 +1008,6 @@ body {
     max-width: 400px;
   }
 }
+
+
 
