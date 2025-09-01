@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Data sync scripts (本地数据同步脚本，不上传GitHub)
+scripts/
+.env
+.env.local
+.env.example
