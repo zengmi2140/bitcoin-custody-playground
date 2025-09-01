@@ -1,261 +1,356 @@
 {
   "hardwareSigners": [
     {
-      "id": "trezor",
-      "name": "Trezor",
-      "logo": "🔒",
-      "features": [
-        { "type": "positive", "text": "支持多种币种" },
-        { "type": "positive", "text": "开源固件" },
-        { "type": "negative", "text": "不防拆" },
-        { "type": "warning", "text": "需要通过Trezor Suite连接" }
-      ],
-      "compatibleWallets": ["sparrow", "electrum", "bluewallet"],
-      "dataTransferMethods": ["usb", "sdcard"]
-    },
-    {
       "id": "coldcard",
-      "name": "ColdCard",
-      "logo": "❄️",
-      "features": [
-        { "type": "positive", "text": "仅支持比特币" },
-        { "type": "positive", "text": "防拆设计" },
-        { "type": "positive", "text": "支持气隙传输" },
-        { "type": "warning", "text": "需要学习曲线" }
-      ],
-      "compatibleWallets": ["sparrow", "electrum", "specter"],
-      "dataTransferMethods": ["sdcard", "psbt"]
-    },
-    {
-      "id": "keystone",
-      "name": "Keystone",
-      "logo": "📱",
-      "features": [
-        { "type": "positive", "text": "大屏幕显示" },
-        { "type": "positive", "text": "二维码传输" },
-        { "type": "positive", "text": "开源硬件" },
-        { "type": "negative", "text": "体积较大" }
-      ],
-      "compatibleWallets": ["sparrow", "bluewallet", "metamask"],
-      "dataTransferMethods": ["qr", "usb"]
+      "name": "Coldcard",
+      "logo": "/images/logos/hardware/coldcard.jpg",
+      "features": [],
+      "compatibleWallets": [
+        "sparrow",
+        "nunchuk"
+      ]
     },
     {
       "id": "ledger",
       "name": "Ledger",
-      "logo": "💳",
-      "features": [
-        { "type": "positive", "text": "安全芯片" },
-        { "type": "positive", "text": "便携设计" },
-        { "type": "negative", "text": "闭源固件" },
-        { "type": "warning", "text": "历史上有数据泄露" }
-      ],
-      "compatibleWallets": ["sparrow", "electrum", "ledger-live"],
-      "dataTransferMethods": ["usb", "bluetooth"]
+      "logo": "/images/logos/hardware/ledger.jpg",
+      "features": [],
+      "compatibleWallets": [
+        "sparrow",
+        "electrum",
+        "liana",
+        "nunchuk"
+      ]
     },
     {
-      "id": "bitbox",
-      "name": "BitBox02",
-      "logo": "📦",
-      "features": [
-        { "type": "positive", "text": "瑞士制造" },
-        { "type": "positive", "text": "开源" },
-        { "type": "positive", "text": "触摸按钮" },
-        { "type": "negative", "text": "市场占有率较小" }
-      ],
-      "compatibleWallets": ["sparrow", "electrum", "bitbox-app"],
-      "dataTransferMethods": ["usb"]
+      "id": "jade",
+      "name": "Blockstream Jade",
+      "logo": "/images/logos/hardware/jade.jpg",
+      "features": [],
+      "compatibleWallets": [
+        "green",
+        "nunchuk",
+        "sparrow",
+        "electrum"
+      ]
+    },
+    {
+      "id": "trezor",
+      "name": "Trezor",
+      "logo": "/images/logos/hardware/trezor.png",
+      "features": [],
+      "compatibleWallets": [
+        "sparrow",
+        "nunchuk",
+        "electrum"
+      ]
+    },
+    {
+      "id": "keystone",
+      "name": "Keystone",
+      "logo": "/images/logos/hardware/keystone.jpg",
+      "features": [],
+      "compatibleWallets": [
+        "sparrow",
+        "electrum",
+        "nunchuk",
+        "bluewallet",
+        "green",
+        "liana"
+      ]
     },
     {
       "id": "none",
       "name": "不使用签名器",
       "logo": "🚫",
-      "features": [
-        { "type": "warning", "text": "私钥存储在软件钱包中" },
-        { "type": "negative", "text": "安全性相对较低" },
-        { "type": "positive", "text": "使用简便" },
-        { "type": "positive", "text": "无需额外硬件" }
-      ],
-      "compatibleWallets": ["sparrow", "electrum", "bluewallet", "specter", "bitcoin-core-wallet"],
-      "dataTransferMethods": []
+      "features": [],
+      "compatibleWallets": [
+        "sparrow",
+        "nunchuk",
+        "electrum",
+        "bluewallet",
+        "green"
+      ]
+    },
+    {
+      "id": "bitbox",
+      "name": "Bitbox 02",
+      "logo": "/images/logos/hardware/bitbox.png",
+      "features": [],
+      "compatibleWallets": [
+        "sparrow",
+        "nunchuk"
+      ]
+    },
+    {
+      "id": "seedsigner",
+      "name": "SeedSigner",
+      "logo": "/images/logos/hardware/seedsigner.png",
+      "features": [],
+      "compatibleWallets": [
+        "sparrow",
+        "nunchuk",
+        "bluewallet",
+        "green",
+        "liana"
+      ]
     }
   ],
   "softwareWallets": [
     {
-      "id": "sparrow",
-      "name": "Sparrow Wallet",
-      "logo": "🐦",
-      "features": [
-        { "type": "positive", "text": "UTXO选择" },
-        { "type": "positive", "text": "支持Taproot" },
-        { "type": "positive", "text": "隐私友好" },
-        { "type": "warning", "text": "仅支持桌面平台" }
+      "id": "green",
+      "name": "Blockstream Green",
+      "logo": "/images/logos/software/green.jpg",
+      "features": [],
+      "compatibleSigners": [
+        "keystone",
+        "jade",
+        "seedsigner",
+        "none"
       ],
-      "compatibleSigners": ["trezor", "coldcard", "keystone", "ledger", "bitbox"],
-      "compatibleNodes": ["bitcoin-core", "electrum-server", "blockstream"],
-      "supportedPlatforms": ["desktop"]
+      "compatibleNodes": [],
+      "supportedPlatforms": [
+        "Desktop",
+        "Mobile"
+      ]
+    },
+    {
+      "id": "sparrow",
+      "name": "Sparrow",
+      "logo": "/images/logos/software/sparrow.png",
+      "features": [
+        {
+          "type": "positive",
+          "text": "UTXO Control"
+        }
+      ],
+      "compatibleSigners": [
+        "trezor",
+        "ledger",
+        "keystone",
+        "coldcard",
+        "bitbox",
+        "seedsigner",
+        "none",
+        "jade"
+      ],
+      "compatibleNodes": [],
+      "supportedPlatforms": [
+        "Desktop"
+      ]
+    },
+    {
+      "id": "bluewallet",
+      "name": "Blue Wallet",
+      "logo": "/images/logos/software/bluewallet.png",
+      "features": [
+        {
+          "type": "positive",
+          "text": "UTXO Control"
+        }
+      ],
+      "compatibleSigners": [
+        "keystone",
+        "seedsigner",
+        "none"
+      ],
+      "compatibleNodes": [],
+      "supportedPlatforms": [
+        "Desktop",
+        "Mobile"
+      ]
+    },
+    {
+      "id": "liana",
+      "name": "Liana",
+      "logo": "/images/logos/software/liana.jpg",
+      "features": [],
+      "compatibleSigners": [
+        "ledger",
+        "keystone",
+        "seedsigner"
+      ],
+      "compatibleNodes": [],
+      "supportedPlatforms": [
+        "Desktop"
+      ]
     },
     {
       "id": "electrum",
       "name": "Electrum",
-      "logo": "⚡",
+      "logo": "/images/logos/software/electrum.jpg",
       "features": [
-        { "type": "positive", "text": "UTXO选择" },
-        { "type": "positive", "text": "发送到多个地址" },
-        { "type": "positive", "text": "P2WPKH地址格式" },
-        { "type": "negative", "text": "不支持Taproot地址" },
-        { "type": "warning", "text": "使用Electrum助记词标准（而非BIP39）" }
+        {
+          "type": "warning",
+          "text": "所生成的种子词并非 BIP39 标准"
+        },
+        {
+          "type": "positive",
+          "text": "UTXO Control"
+        }
       ],
-      "compatibleSigners": ["trezor", "coldcard", "ledger", "bitbox"],
-      "compatibleNodes": ["electrum-server", "bitcoin-core"],
-      "supportedPlatforms": ["desktop", "mobile"]
+      "compatibleSigners": [
+        "ledger",
+        "trezor",
+        "keystone",
+        "none",
+        "jade"
+      ],
+      "compatibleNodes": [],
+      "supportedPlatforms": [
+        "Desktop",
+        "Mobile"
+      ]
     },
     {
-      "id": "bluewallet",
-      "name": "BlueWallet",
-      "logo": "💙",
+      "id": "nunchuk",
+      "name": "Nunchuk",
+      "logo": "/images/logos/software/nunchuk.png",
       "features": [
-        { "type": "positive", "text": "移动端友好" },
-        { "type": "positive", "text": "支持闪电网络" },
-        { "type": "positive", "text": "界面美观" },
-        { "type": "negative", "text": "桌面版功能有限" }
+        {
+          "type": "positive",
+          "text": "UTXO Control"
+        }
       ],
-      "compatibleSigners": ["trezor", "keystone"],
-      "compatibleNodes": ["electrum-server", "lnd"],
-      "supportedPlatforms": ["mobile", "desktop"]
-    },
-    {
-      "id": "specter",
-      "name": "Specter Desktop",
-      "logo": "👻",
-      "features": [
-        { "type": "positive", "text": "专注硬件钱包" },
-        { "type": "positive", "text": "支持多签" },
-        { "type": "positive", "text": "隐私保护" },
-        { "type": "warning", "text": "需要运行自己的节点" }
+      "compatibleSigners": [
+        "trezor",
+        "keystone",
+        "jade",
+        "seedsigner",
+        "none",
+        "ledger",
+        "coldcard",
+        "bitbox"
       ],
-      "compatibleSigners": ["coldcard", "trezor", "ledger"],
-      "compatibleNodes": ["bitcoin-core"],
-      "supportedPlatforms": ["desktop"]
-    },
-    {
-      "id": "bitcoin-core-wallet",
-      "name": "Bitcoin Core Wallet",
-      "logo": "₿",
-      "features": [
-        { "type": "positive", "text": "官方实现" },
-        { "type": "positive", "text": "完全验证" },
-        { "type": "negative", "text": "界面简陋" },
-        { "type": "negative", "text": "不支持硬件签名器" }
-      ],
-      "compatibleSigners": [],
-      "compatibleNodes": ["bitcoin-core"],
-      "supportedPlatforms": ["desktop"]
+      "compatibleNodes": [],
+      "supportedPlatforms": [
+        "Desktop",
+        "Mobile"
+      ]
     }
   ],
   "nodes": [
     {
-      "id": "bitcoin-core",
+      "id": "electrs",
+      "name": "electrs",
+      "logo": "/images/logos/nodes/electrs.png",
+      "features": [
+        {
+          "type": "warning",
+          "text": "依赖于 Bitcoin Core/Bitcoin Knots"
+        },
+        {
+          "type": "positive",
+          "text": "服务端不留存地址信息"
+        },
+        {
+          "type": "warning",
+          "text": "需要大量存储空间（~50 GB）"
+        }
+      ],
+      "compatibleWallets": [
+        "sparrow",
+        "nunchuk",
+        "electrum",
+        "bluewallet",
+        "green"
+      ]
+    },
+    {
+      "id": "publicnode",
+      "name": "默认/公开 节点",
+      "logo": "/images/logos/nodes/bitcoin-core.png",
+      "features": [
+        {
+          "type": "negative",
+          "text": "地址集群暴露"
+        }
+      ],
+      "compatibleWallets": [
+        "sparrow",
+        "nunchuk",
+        "electrum",
+        "bluewallet",
+        "green",
+        "liana"
+      ]
+    },
+    {
+      "id": "bitcoincore",
       "name": "Bitcoin Core",
-      "logo": "🟠",
+      "logo": "/images/logos/nodes/bitcoin-core.png",
       "features": [
-        { "type": "positive", "text": "完整验证所有交易" },
-        { "type": "positive", "text": "最高安全性" },
-        { "type": "negative", "text": "需要大量存储空间（500GB+）" },
-        { "type": "warning", "text": "初始同步时间长（数天）" }
+        {
+          "type": "warning",
+          "text": "服务端留存地址信息"
+        }
       ],
-      "compatibleWallets": ["sparrow", "electrum", "specter", "bitcoin-core-wallet"]
+      "compatibleWallets": [
+        "sparrow",
+        "liana"
+      ]
     },
     {
-      "id": "electrum-server",
-      "name": "Electrum Server",
-      "logo": "🔌",
+      "id": "eps",
+      "name": "Electrum Personal Server",
+      "logo": "/images/logos/nodes/electrum.jpg",
       "features": [
-        { "type": "positive", "text": "快速同步" },
-        { "type": "positive", "text": "隐私友好" },
-        { "type": "negative", "text": "依赖Bitcoin Core" },
-        { "type": "warning", "text": "需要额外设置" }
+        {
+          "type": "warning",
+          "text": "服务端留存地址信息"
+        },
+        {
+          "type": "warning",
+          "text": "依赖于 Bitcoin Core/Bitcoin Knots"
+        }
       ],
-      "compatibleWallets": ["sparrow", "electrum", "bluewallet"]
+      "compatibleWallets": [
+        "sparrow",
+        "nunchuk",
+        "electrum",
+        "bluewallet",
+        "green"
+      ]
     },
     {
-      "id": "blockstream",
-      "name": "Blockstream Green",
-      "logo": "🌿",
+      "id": "knots",
+      "name": "Bitcoin Knots",
+      "logo": "/images/logos/nodes/bitcoinknots.jpg",
       "features": [
-        { "type": "positive", "text": "免费使用" },
-        { "type": "positive", "text": "快速同步" },
-        { "type": "negative", "text": "依赖第三方" },
-        { "type": "warning", "text": "隐私性较低" }
+        {
+          "type": "warning",
+          "text": "服务端留存地址信息"
+        }
       ],
-      "compatibleWallets": ["sparrow"]
-    }
-  ],
-  "connections": [
-    {
-      "from": "trezor",
-      "to": "sparrow",
-      "method": "usb",
-      "direction": "bidirectional",
-      "description": "通过USB连接传输签名和公钥"
-    },
-    {
-      "from": "coldcard",
-      "to": "sparrow",
-      "method": "sdcard",
-      "direction": "bidirectional",
-      "description": "通过SD卡气隙传输PSBT文件"
-    },
-    {
-      "from": "bitcoin-core",
-      "to": "sparrow",
-      "method": "rpc",
-      "direction": "to-wallet",
-      "description": "余额信息"
-    },
-    {
-      "from": "electrum-server",
-      "to": "electrum",
-      "method": "tcp",
-      "direction": "to-wallet",
-      "description": "余额信息"
-    },
-    {
-      "from": "sparrow",
-      "to": "bitcoin-core",
-      "method": "rpc",
-      "direction": "to-node",
-      "description": "地址；已签名交易"
-    },
-    {
-      "from": "electrum",
-      "to": "electrum-server",
-      "method": "tcp",
-      "direction": "to-node",
-      "description": "地址；已签名交易"
+      "compatibleWallets": [
+        "sparrow",
+        "liana"
+      ]
     }
   ],
   "transferMethods": {
-    "trezor": {
-      "sparrow": ["USB"],
-      "electrum": ["USB"],
-      "bluewallet": ["USB"]
-    },
-    "coldcard": {
-      "sparrow": ["SD卡"],
-      "electrum": ["SD卡"],
-      "specter": ["SD卡"]
-    },
     "keystone": {
-      "sparrow": ["二维码", "USB"],
-      "bluewallet": ["二维码"]
+      "sparrow": [
+        "USB",
+        "二维码",
+        "microSD 卡"
+      ]
     },
     "ledger": {
-      "sparrow": ["USB"],
-      "electrum": ["USB", "蓝牙"]
+      "nunchuk": [
+        "蓝牙"
+      ]
     },
-    "bitbox": {
-      "sparrow": ["USB"],
-      "electrum": ["USB"]
+    "coldcard": {
+      "sparrow": [
+        "USB",
+        "microSD 卡"
+      ]
+    },
+    "trezor": {
+      "sparrow": [
+        "USB"
+      ]
     }
   }
 }

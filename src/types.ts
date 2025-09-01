@@ -11,7 +11,6 @@ export interface HardwareSigner {
   logo: string;
   features: Feature[];
   compatibleWallets: string[];
-  dataTransferMethods: string[];
 }
 
 // 软件钱包类型
