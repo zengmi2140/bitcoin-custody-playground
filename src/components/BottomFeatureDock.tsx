@@ -29,9 +29,7 @@ const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
     position: 'fixed',
     bottom: 20,
     zIndex: 20,
-    transform: 'translateX(-50%)',
-    maxHeight: 272,
-    overflowY: 'auto'
+    transform: 'translateX(-50%)'
   };
 
   return (

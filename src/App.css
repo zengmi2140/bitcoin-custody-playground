@@ -806,6 +806,7 @@ body {
   max-width: 350px;
   flex: 1;
   z-index: 20; /* 提升层级，确保悬浮层可见 */
+  height: 348px; /* 统一高度：标题+分割+列表(272)+上下内边距等 */
 }
 
 .feature-title {
