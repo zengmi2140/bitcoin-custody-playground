@@ -62,16 +62,16 @@ const renderLogo = (logo: string, componentId: string) => {
   );
 };
 
-const ComponentColumn: React.FC<ComponentColumnProps> = ({
+const ComponentColumn = React.forwardRef<HTMLDivElement, ComponentColumnProps>(({
   title,
   components,
   selectedComponents,
   getComponentState,
   onComponentClick,
   type
-}) => {
+}, ref) => {
   return (
-    <div className="component-column">
+    <div className="component-column" ref={ref}>
       <h2 className="column-title">{title}</h2>
       <div className="components-grid">
         {components.map((component) => {
@@ -96,6 +96,8 @@ const ComponentColumn: React.FC<ComponentColumnProps> = ({
       </div>
     </div>
   );
-};
+});
+
+ComponentColumn.displayName = 'ComponentColumn';
 
 export default ComponentColumn;

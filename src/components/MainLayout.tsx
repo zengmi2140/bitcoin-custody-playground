@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { UserPreference, ComponentState, CustodyData } from '../types';
 import ComponentColumn from './ComponentColumn';
+import BottomFeatureDock from './BottomFeatureDock';
 
 interface MainLayoutProps {
   userPreference: UserPreference | null;
@@ -64,6 +65,32 @@ const MainLayout: React.FC<MainLayoutProps> = ({
 
   const transferMethods = getTransferMethods();
 
+  const signerRef = useRef<HTMLDivElement>(null);
+  const walletRef = useRef<HTMLDivElement>(null);
+  const nodeRef = useRef<HTMLDivElement>(null);
+
+  const [centers, setCenters] = useState<{ signer?: number; wallet?: number; node?: number }>({});
+
+  const measure = () => {
+    const getCenter = (el?: HTMLElement | null) => el ? (el.getBoundingClientRect().left + el.getBoundingClientRect().width / 2) : undefined;
+    setCenters({
+      signer: getCenter(signerRef.current),
+      wallet: getCenter(walletRef.current),
+      node: getCenter(nodeRef.current)
+    });
+  };
+
+  useLayoutEffect(() => {
+    measure();
+    const ro = new ResizeObserver(() => measure());
+    [signerRef.current, walletRef.current, nodeRef.current].forEach(el => el && ro.observe(el));
+    window.addEventListener('resize', measure);
+    return () => {
+      window.removeEventListener('resize', measure);
+      ro.disconnect();
+    };
+  }, []);
+
   return (
     <main className="main-layout">
       <div className="layout-container three-column">
@@ -76,6 +103,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           getComponentState={(id: string) => getComponentState(id, 'signer')}
           onComponentClick={(id: string) => onComponentClick(id, 'signer')}
           type="signer"
+          ref={signerRef}
         />
         
         <div className="data-flow">
@@ -107,6 +135,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           getComponentState={(id: string) => getComponentState(id, 'wallet')}
           onComponentClick={(id: string) => onComponentClick(id, 'wallet')}
           type="wallet"
+          ref={walletRef}
         />
         
         <div 
@@ -141,8 +170,16 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           getComponentState={(id: string) => getComponentState(id, 'node')}
           onComponentClick={(id: string) => onComponentClick(id, 'node')}
           type="node"
+          ref={nodeRef}
         />
       </div>
+      <BottomFeatureDock
+        centers={centers}
+        selectedSigners={selectedSigners}
+        selectedWallet={selectedWallet}
+        selectedNode={selectedNode}
+        custodyData={custodyData}
+      />
     </main>
   );
 };

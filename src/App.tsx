@@ -369,64 +369,6 @@ function App() {
         custodyData={state.custodyData}
       />
       
-      {/* 页面底部的三个特性框 - 与上方Grid列对齐 */}
-      <div className="bottom-features three-column">
-        {/* 硬件签名器特性框 */}
-        {state.selectedSigners.length > 0 && (
-          <div className="feature-box signer">
-            <h4 className="feature-title">硬件签名器特性</h4>
-            <div className="feature-list">
-              {state.selectedSigners.map(signerId => {
-                const signer = state.custodyData?.hardwareSigners.find(s => s.id === signerId);
-                return signer?.features.map((feature, index) => (
-                  <div key={`${signerId}-${index}`} className={`feature-item ${feature.type}`}>
-                    <span className="feature-icon">{feature.type === 'positive' ? '✅' : feature.type === 'negative' ? '❌' : '⚠️'}</span>
-                    <span className="feature-text">{feature.text}</span>
-                  </div>
-                ));
-              })}
-            </div>
-          </div>
-        )}
-        
-        {/* 软件钱包特性框 */}
-        {state.selectedWallet && (
-          <div className="feature-box wallet">
-            <h4 className="feature-title">软件钱包特性</h4>
-            <div className="feature-list">
-              {(() => {
-                const wallet = state.custodyData?.softwareWallets.find(w => w.id === state.selectedWallet);
-                return wallet?.features.map((feature, index) => (
-                  <div key={index} className={`feature-item ${feature.type}`}>
-                    <span className="feature-icon">{feature.type === 'positive' ? '✅' : feature.type === 'negative' ? '❌' : '⚠️'}</span>
-                    <span className="feature-text">{feature.text}</span>
-                  </div>
-                ));
-              })()
-              }
-            </div>
-          </div>
-        )}
-        
-        {/* 区块链节点特性框 */}
-        {state.selectedNode && (
-          <div className="feature-box node">
-            <h4 className="feature-title">区块链节点特性</h4>
-            <div className="feature-list">
-              {(() => {
-                const node = state.custodyData?.nodes.find(n => n.id === state.selectedNode);
-                return node?.features.map((feature, index) => (
-                  <div key={index} className={`feature-item ${feature.type}`}>
-                    <span className="feature-icon">{feature.type === 'positive' ? '✅' : feature.type === 'negative' ? '❌' : '⚠️'}</span>
-                    <span className="feature-text">{feature.text}</span>
-                  </div>
-                ));
-              })()
-              }
-            </div>
-          </div>
-        )}
-      </div>
     </div>
   );
 }
