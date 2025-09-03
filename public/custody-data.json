@@ -35,12 +35,14 @@
         },
         {
           "type": "warning",
-          "text": "PIN 码不可删改"
+          "text": "多次输错 PIN 码设备报废"
         }
       ],
       "compatibleWallets": [
         "sparrow",
-        "nunchuk"
+        "nunchuk",
+        "liana",
+        "electrum"
       ]
     },
     {
@@ -71,6 +73,10 @@
         {
           "type": "positive",
           "text": "支持 Passphrase（密语）"
+        },
+        {
+          "type": "negative",
+          "text": "没有开源"
         }
       ],
       "compatibleWallets": [
@@ -104,17 +110,14 @@
         {
           "type": "positive",
           "text": "Air-gapped 体验"
-        },
-        {
-          "type": "positive",
-          "text": "大屏幕"
         }
       ],
       "compatibleWallets": [
-        "green",
         "nunchuk",
         "sparrow",
-        "electrum"
+        "electrum",
+        "liana",
+        "bluewallet"
       ]
     },
     {
@@ -136,15 +139,11 @@
         },
         {
           "type": "positive",
-          "text": "开源安全芯片"
-        },
-        {
-          "type": "positive",
-          "text": "大屏幕"
-        },
-        {
-          "type": "positive",
           "text": "支持 Passphrase（密语）"
+        },
+        {
+          "type": "positive",
+          "text": "安全芯片"
         }
       ],
       "compatibleWallets": [
@@ -199,9 +198,7 @@
         "sparrow",
         "electrum",
         "nunchuk",
-        "bluewallet",
-        "liana",
-        "green"
+        "bluewallet"
       ]
     },
     {
@@ -223,7 +220,7 @@
         "nunchuk",
         "electrum",
         "bluewallet",
-        "green"
+        "liana"
       ]
     },
     {
@@ -234,10 +231,6 @@
         {
           "type": "positive",
           "text": "安全芯片"
-        },
-        {
-          "type": "positive",
-          "text": "开源固件"
         },
         {
           "type": "positive",
@@ -270,7 +263,9 @@
       ],
       "compatibleWallets": [
         "sparrow",
-        "nunchuk"
+        "nunchuk",
+        "liana",
+        "electrum"
       ]
     },
     {
@@ -300,19 +295,11 @@
         },
         {
           "type": "positive",
-          "text": "开源固件"
-        },
-        {
-          "type": "positive",
           "text": "支持 Passphrase（密语）"
         },
         {
           "type": "positive",
           "text": "Air-gapped 体验"
-        },
-        {
-          "type": "positive",
-          "text": "大屏幕"
         },
         {
           "type": "positive",
@@ -323,46 +310,11 @@
         "sparrow",
         "nunchuk",
         "bluewallet",
-        "green",
         "liana"
       ]
     }
   ],
   "softwareWallets": [
-    {
-      "id": "green",
-      "name": "Blockstream Green",
-      "logo": "/images/logos/software/green.jpg",
-      "features": [
-        {
-          "type": "positive",
-          "text": "UTXO Control"
-        },
-        {
-          "type": "positive",
-          "text": "同时支付多个对象"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
-        }
-      ],
-      "compatibleSigners": [
-        "jade",
-        "seedsigner",
-        "none",
-        "keystone"
-      ],
-      "compatibleNodes": [],
-      "supportedPlatforms": [
-        "Desktop",
-        "Mobile"
-      ]
-    },
     {
       "id": "sparrow",
       "name": "Sparrow",
@@ -457,7 +409,8 @@
       "compatibleSigners": [
         "keystone",
         "seedsigner",
-        "none"
+        "none",
+        "jade"
       ],
       "compatibleNodes": [],
       "supportedPlatforms": [
@@ -489,8 +442,11 @@
       ],
       "compatibleSigners": [
         "ledger",
-        "keystone",
-        "seedsigner"
+        "seedsigner",
+        "none",
+        "coldcard",
+        "bitbox",
+        "jade"
       ],
       "compatibleNodes": [],
       "supportedPlatforms": [
@@ -544,7 +500,9 @@
         "trezor",
         "keystone",
         "none",
-        "jade"
+        "jade",
+        "coldcard",
+        "bitbox"
       ],
       "compatibleNodes": [],
       "supportedPlatforms": [
@@ -596,6 +554,10 @@
         {
           "type": "positive",
           "text": "地址描述符 导入/导出"
+        },
+        {
+          "type": "positive",
+          "text": "支持 Taproot 多签名"
         }
       ],
       "compatibleSigners": [
@@ -638,8 +600,7 @@
         "sparrow",
         "nunchuk",
         "electrum",
-        "bluewallet",
-        "green"
+        "bluewallet"
       ]
     },
     {
@@ -657,7 +618,6 @@
         "nunchuk",
         "electrum",
         "bluewallet",
-        "green",
         "liana"
       ]
     },
@@ -694,8 +654,7 @@
         "sparrow",
         "nunchuk",
         "electrum",
-        "bluewallet",
-        "green"
+        "bluewallet"
       ]
     },
     {
@@ -724,12 +683,6 @@
       ],
       "nunchuk": [
         "二维码"
-      ],
-      "blockstreamgreen": [
-        "二维码"
-      ],
-      "liana": [
-        "二维码"
       ]
     },
     "keystone": {
@@ -739,7 +692,8 @@
         "microSD 卡"
       ],
       "electrum": [
-        "USB"
+        "USB",
+        "microSD 卡"
       ],
       "nunchuk": [
         "USB",
@@ -760,12 +714,12 @@
       ],
       "nunchuk": [
         "二维码",
-        "蓝牙"
-      ],
-      "blockstreamgreen": [
-        "蓝牙"
+        "USB"
       ],
       "electrum": [
+        "USB"
+      ],
+      "liana": [
         "USB"
       ]
     },
@@ -779,10 +733,10 @@
       "bluewallet": [
         "无"
       ],
-      "blockstreamgreen": [
+      "nunchuk": [
         "无"
       ],
-      "nunchuk": [
+      "liana": [
         "无"
       ]
     },
@@ -812,9 +766,6 @@
         "USB"
       ],
       "nunchuk": [
-        "USB"
-      ],
-      "liana": [
         "USB"
       ]
     },

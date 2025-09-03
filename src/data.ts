@@ -93,7 +93,7 @@ export const custodyData: CustodyData = {
         { type: 'warning', text: '仅支持桌面平台' }
       ],
       compatibleSigners: ['trezor', 'coldcard', 'keystone', 'ledger', 'bitbox'],
-      compatibleNodes: ['bitcoin-core', 'electrum-server', 'blockstream'],
+      compatibleNodes: ['bitcoin-core', 'electrum-server'],
       supportedPlatforms: ['desktop']
     },
     {
@@ -179,18 +179,7 @@ export const custodyData: CustodyData = {
       ],
       compatibleWallets: ['sparrow', 'electrum', 'bluewallet']
     },
-    {
-      id: 'blockstream',
-      name: 'Blockstream Green',
-      logo: '🌿',
-      features: [
-        { type: 'positive', text: '免费使用' },
-        { type: 'positive', text: '快速同步' },
-        { type: 'negative', text: '依赖第三方' },
-        { type: 'warning', text: '隐私性较低' }
-      ],
-      compatibleWallets: ['sparrow']
-    }
+
   ],
   connections: [
     {
