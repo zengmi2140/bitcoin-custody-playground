@@ -221,10 +221,13 @@ type ComponentState = 'inactive' | 'breathing' | 'active';
 
 ### 3.5 特性展示系统
 
-#### 3.5.1 布局策略
-- **底部固定定位**：使用CSS Grid布局，与上方组件列垂直对齐
-- **动态对齐**：三列模式和两列模式自动适配
-- **响应式设计**：移动端垂直堆叠，桌面端水平对齐
+#### 3.5.1 布局策略（更新：采用“方案A 定位同步”）
+- **底部固定定位（悬浮）**：特性框始终固定在页面底部，随页面滚动保持可见
+- **定位同步对齐**：通过 JavaScript 测量上方三列容器（`ComponentColumn`）的实际像素位置，计算各列的水平中心点，将底部三个特性框分别以 `position: fixed; bottom: 20px; left: <columnCenterX>` 排布，并用 `transform: translateX(-50%)` 做精确居中，确保与各自对应列垂直对齐
+- **桌面端优先**：当前版本仅实现桌面端；移动端对齐策略暂不实现
+- **页面底部留白（固定值）**：为主内容区域固定增加 `padding-bottom: 160px`，避免被底部固定特性框遮挡
+- **底边距（固定值）**：特性框底边距固定为 `bottom: 20px`
+- **样式沿用**：特性框外观、配色、阴影沿用现有 `.feature-box`、`.feature-item` 等样式定义
 
 #### 3.5.2 对齐算法
 ```typescript
@@ -253,6 +256,86 @@ const twoColumnLayout = {
 - **正面特性** (positive)：绿色背景 (#f0fdf4)，✅图标
 - **负面特性** (negative)：红色背景 (#fef2f2)，❌图标  
 - **警告特性** (warning)：橙色背景 (#fffbeb)，⚠️图标
+
+#### 3.5.4 对齐实现方案（方案A：定位同步，精确对齐）
+- **核心思路**：
+  - 在 `ComponentColumn` 根容器上添加 `ref`，由父组件统一管理三列的 DOM 节点
+  - 在首帧渲染后以及窗口尺寸变化、字体/图片加载导致布局变化时，通过 `getBoundingClientRect()` 读取三列容器的矩形信息，取各自 `centerX = rect.left + rect.width / 2`
+  - 三个特性框使用 `position: fixed; bottom: 20px; z-index: 20`，分别设置 `left: centerX; transform: translateX(-50%)` 实现像素级对齐
+  - 使用 `ResizeObserver` 监听三列容器尺寸变化，并监听 `window.resize` 事件，触发位置重算；在 `useLayoutEffect` 中同步测量，避免绘制抖动
+
+- **交互与显示规则**：
+  - 未选择对应列时：对应特性框隐藏，完全不渲染（不保留占位）
+  - 多选硬件签名器：当前阶段不支持多签模式，无需实现多签下的特性展示合并
+  - 特性框最大高度（固定像素）：限制为可显示约“6.5 条特性”的高度，超出部分 `overflow-y: auto` 内滚动，直观提示可滚动查看更多。
+    - 换算依据（以当前样式为准）：
+      - `.feature-item { padding: 8px 12px; font-size: 0.9rem; }`，正文 `0.9rem` 以 16px 基线计算约为 14.4px
+      - `.feature-text { line-height: 1.4; }` → 文本行高约 14.4 × 1.4 = 20.16px
+      - 单条特性项高度 ≈ 文本行高 20.16 + 上下内边距 16 = 36.16px（取整 36px）
+      - 列表垂直间距 `.feature-list { gap: 6px }`
+      - 6.5 条特性可见区域高度 ≈ (6.5 × 36) + (6 × 6) = 234 + 36 = 270px
+      - 考虑子像素与平台舍入，固定为 `max-height: 272px`
+    - 结论：特性框 `max-height: 272px; overflow-y: auto;`
+  - 页面底部留白：为主内容容器固定 `padding-bottom: 160px`，确保被固定层不遮挡主要内容
+  - 层级：固定层 `z-index: 20`，高于页面其他元素
+  - 桌面端范围：当前版本仅实现桌面端该策略；移动端不启用
+  - 动效：出现/隐藏不添加过渡或淡入淡出动画（无动效）
+
+- **空渲染与闪动处理**：
+  - 在首次测量完成前不渲染固定特性框，避免位置不准导致的闪动
+  - 测量失败或 DOM 不存在时跳过渲染，并在下一帧/下次变化时重试
+
+- **优势与维护性**：
+  - 直接读取真实布局位置，不依赖复制上层 Grid 模板或任何补偿偏移（例如 `.layout-container.three-column` 的 `margin-left` 补偿），当上层布局/间距调整时仍可保持精确对齐
+  - 与三列显示/隐藏状态解耦，一个特性框出现/隐藏不会影响其它两个的位置
+
+- **实现要点（伪代码）**：
+```typescript
+// 父组件中
+const signerRef = useRef<HTMLDivElement>(null);
+const walletRef = useRef<HTMLDivElement>(null);
+const nodeRef = useRef<HTMLDivElement>(null);
+
+const [centers, setCenters] = useState<{ signer?: number; wallet?: number; node?: number }>({});
+
+const measure = () => {
+  const getCenter = (el?: HTMLElement | null) => el ? (el.getBoundingClientRect().left + el.getBoundingClientRect().width / 2) : undefined;
+  setCenters({
+    signer: getCenter(signerRef.current ?? undefined),
+    wallet: getCenter(walletRef.current ?? undefined),
+    node: getCenter(nodeRef.current ?? undefined)
+  });
+};
+
+useLayoutEffect(() => {
+  measure();
+  const ro = new ResizeObserver(measure);
+  [signerRef.current, walletRef.current, nodeRef.current].forEach(el => el && ro.observe(el));
+  window.addEventListener('resize', measure);
+  return () => { window.removeEventListener('resize', measure); ro.disconnect(); };
+}, []);
+
+// BottomFeatureDock 中（固定层）
+// 根据 centers.signer / centers.wallet / centers.node 设置 style.left 和 transform
+// 固定层样式关键点（示意）：
+// position: fixed; bottom: 20px; z-index: 20;
+// 特性框样式关键点（示意）： max-height: 272px; overflow-y: auto;
+```
+
+#### 3.5.5 验收标准与测试用例（桌面端）
+- 对齐与固定：
+  - 在 1200px ~ 1920px 桌面宽度范围内，三个特性框的水平中心与其对应 `ComponentColumn` 的水平中心重合（允许±1px 偏差）
+  - 页面上下滚动时，特性框始终固定在底部（距底 20px），不随内容滚动
+  - 当某一列未选择时，对应特性框不渲染，其他两框位置不受影响
+- 高度与滚动：
+  - 当特性条目 ≥ 7 条时，特性框内部出现垂直滚动条；首屏可见区域约为 6.5 条
+  - `max-height` 为 272px，内部 `overflow-y: auto`，外部容器不随内容增长
+- 叠放顺序与遮挡：
+  - `z-index: 20` 保证固定层位于页面其它元素之上
+  - 主内容容器设置 `padding-bottom: 160px`，底部内容不被固定特性框遮挡
+- 响应变化：
+  - 窗口尺寸变化、字体/图片加载导致布局变化时，底部特性框位置自动随之矫正
+  - 首次渲染在完成位置测量后再显示固定层，不出现明显抖动或错位
 
 ## 4. 数据配置
 
