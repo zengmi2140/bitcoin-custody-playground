@@ -105,7 +105,9 @@ function App() {
       if (!wallet) return 'inactive';
       
       // 检查是否支持用户选择的设备类型
-      if (!wallet.supportedPlatforms.includes(userDeviceType)) {
+      if (!wallet.supportedPlatforms.some(platform => 
+        platform.toLowerCase() === userDeviceType
+      )) {
         return 'inactive';
       }
       
