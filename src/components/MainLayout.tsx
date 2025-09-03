@@ -72,21 +72,58 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   const [centers, setCenters] = useState<{ signer?: number; wallet?: number; node?: number }>({});
 
   const measure = () => {
-    const getCenter = (el?: HTMLElement | null) => el ? (el.getBoundingClientRect().left + el.getBoundingClientRect().width / 2) : undefined;
+    const getTitleCenter = (columnEl?: HTMLElement | null): number | undefined => {
+      if (!columnEl) return undefined;
+      const titleEl = columnEl.querySelector('.column-title') as HTMLElement | null;
+      if (!titleEl) return undefined;
+
+      // 优先尝试以文本节点边界为基准
+      const textNode = Array.from(titleEl.childNodes).find(n => n.nodeType === Node.TEXT_NODE) as Text | undefined;
+      try {
+        if (textNode && textNode.textContent && textNode.textContent.trim().length > 0) {
+          const range = document.createRange();
+          range.selectNodeContents(textNode);
+          const rect = range.getBoundingClientRect();
+          return Math.round(rect.left + rect.width / 2);
+        }
+      } catch (_) {
+        // 忽略 Range 失败，退化为元素盒模型
+      }
+
+      const rect = titleEl.getBoundingClientRect();
+      return Math.round(rect.left + rect.width / 2);
+    };
+
     setCenters({
-      signer: getCenter(signerRef.current),
-      wallet: getCenter(walletRef.current),
-      node: getCenter(nodeRef.current)
+      signer: getTitleCenter(signerRef.current),
+      wallet: getTitleCenter(walletRef.current),
+      node: getTitleCenter(nodeRef.current)
     });
   };
 
   useLayoutEffect(() => {
-    measure();
+    const observeTargets: (Element | null)[] = [];
     const ro = new ResizeObserver(() => measure());
-    [signerRef.current, walletRef.current, nodeRef.current].forEach(el => el && ro.observe(el));
+
+    // 初次测量：等字体就绪后再次测量，避免字体替换引起的宽度变化
+    measure();
+    if ((document as any).fonts && (document as any).fonts.ready) {
+      (document as any).fonts.ready.then(() => measure()).catch(() => {});
+    }
+
+    // 监听标题元素而非整列容器，减少外层补偿的干扰
+    [signerRef.current, walletRef.current, nodeRef.current].forEach(col => {
+      const titleEl = col?.querySelector('.column-title') || null;
+      if (titleEl) {
+        ro.observe(titleEl);
+        observeTargets.push(titleEl);
+      }
+    });
+
     window.addEventListener('resize', measure);
     return () => {
       window.removeEventListener('resize', measure);
+      observeTargets.forEach(t => t && ro.unobserve(t));
       ro.disconnect();
     };
   }, []);
