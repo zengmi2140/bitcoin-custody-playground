@@ -128,6 +128,15 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     };
   }, []);
 
+  // 对硬件签名器列表进行排序，确保"不使用签名器"始终在最后
+  const sortedHardwareSigners = [...custodyData.hardwareSigners].sort((a, b) => {
+    // 如果一个是"不使用签名器"，另一个不是，则"不使用签名器"排在后面
+    if (a.id === 'none' && b.id !== 'none') return 1;
+    if (b.id === 'none' && a.id !== 'none') return -1;
+    // 其他情况保持原有顺序
+    return 0;
+  });
+
   return (
     <main className="main-layout">
       <div className="layout-container three-column">
@@ -135,7 +144,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         {/* 硬件签名器列 - 始终显示 */}
         <ComponentColumn
           title="硬件签名器"
-          components={custodyData.hardwareSigners}
+          components={sortedHardwareSigners}
           selectedComponents={selectedSigners}
           getComponentState={(id: string) => getComponentState(id, 'signer')}
           onComponentClick={(id: string) => onComponentClick(id, 'signer')}
