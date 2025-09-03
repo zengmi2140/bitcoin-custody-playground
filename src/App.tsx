@@ -70,6 +70,7 @@ function App() {
     const userDeviceType = state.userPreference.deviceType;
     
     if (type === 'signer') {
+      // 已选中的签名器显示为active
       if (state.selectedSigners.includes(componentId)) return 'active';
       
       // 如果该列已有选中项，其他项不呼吸
@@ -77,7 +78,7 @@ function App() {
         return 'inactive';
       }
       
-      // 检查与当前选择的钱包是否兼容
+      // 检查与当前选择的钱包是否兼容（反向兼容）
       if (state.selectedWallet) {
         const wallet = state.custodyData.softwareWallets.find(w => w.id === state.selectedWallet);
         if (wallet && wallet.compatibleSigners.includes(componentId)) {
@@ -85,8 +86,8 @@ function App() {
         }
       }
       
-      // 初始状态：如果用户选择了“愿意尝试硬件签名器”，硬件签名器列呼吸
-      if (state.userPreference.signerWillingness === 'with-signer' && state.selectedWallet === null) {
+      // 初始状态：如果用户选择了"愿意尝试硬件签名器"，硬件签名器列呼吸
+      if (state.userPreference.signerWillingness === 'with-signer' && state.selectedWallet === null && state.selectedNode === null) {
         return 'breathing';
       }
       
@@ -94,6 +95,7 @@ function App() {
     }
     
     if (type === 'wallet') {
+      // 已选中的钱包显示为active
       if (state.selectedWallet === componentId) return 'active';
       
       // 如果该列已有选中项，其他项不呼吸
@@ -111,9 +113,9 @@ function App() {
         return 'inactive';
       }
       
-      // 检查与选择的签名器是否兼容
+      // 检查与选择的签名器是否兼容（正向兼容）
       if (state.selectedSigners.length > 0) {
-        // 如果选中的是“不使用签名器”，支持当前设备的钱包就呼吸
+        // 如果选中的是"不使用签名器"，支持当前设备的钱包就呼吸
         if (state.selectedSigners.includes('none')) {
           return 'breathing';
         }
@@ -121,10 +123,13 @@ function App() {
         if (state.selectedSigners.some(signer => signer !== 'none' && wallet.compatibleSigners.includes(signer))) {
           return 'breathing';
         }
-      } else {
-        // 初始状态：如果用户选择了“愿意尝试”但还没选签名器，不让钱包呼吸
-        if (state.userPreference.signerWillingness === 'with-signer') {
-          return 'inactive';
+      }
+      
+      // 检查与当前选择的节点是否兼容（反向兼容）
+      if (state.selectedNode) {
+        const node = state.custodyData.nodes.find(n => n.id === state.selectedNode);
+        if (node && node.compatibleWallets.includes(componentId)) {
+          return 'breathing';
         }
       }
       
@@ -132,6 +137,7 @@ function App() {
     }
     
     if (type === 'node') {
+      // 已选中的节点显示为active
       if (state.selectedNode === componentId) return 'active';
       
       // 如果该列已有选中项，其他项不呼吸
@@ -139,7 +145,7 @@ function App() {
         return 'inactive';
       }
       
-      // 检查与选择的钱包是否兼容
+      // 检查与选择的钱包是否兼容（正向兼容）
       if (state.selectedWallet) {
         const node = state.custodyData.nodes.find(n => n.id === componentId);
         if (node && node.compatibleWallets.includes(state.selectedWallet)) {
@@ -155,58 +161,79 @@ function App() {
 
   // 处理组件点击
   const handleComponentClick = (componentId: string, type: 'signer' | 'wallet' | 'node') => {
+    const currentState = getComponentState(componentId, type);
+    
+    // 如果点击的是非呼吸状态（inactive）的选项，执行重置逻辑
+    if (currentState === 'inactive') {
+      setState(prev => {
+        // 重置所有选择
+        const newState = {
+          ...prev,
+          selectedSigners: [],
+          selectedWallet: null,
+          selectedNode: null
+        };
+        
+        // 根据点击的组件类型，设置相应的选择
+        if (type === 'signer') {
+          // 如果点击的是"不使用签名器"
+          if (componentId === 'none') {
+            const newPreference = {
+              ...prev.userPreference!,
+              signerWillingness: 'no-signer' as const
+            };
+            localStorage.setItem('userPreference', JSON.stringify(newPreference));
+            
+            return {
+              ...newState,
+              userPreference: newPreference,
+              selectedSigners: [componentId]
+            };
+          } else {
+            // 选择硬件签名器
+            const newPreference = {
+              ...prev.userPreference!,
+              signerWillingness: 'with-signer' as const
+            };
+            localStorage.setItem('userPreference', JSON.stringify(newPreference));
+            
+            return {
+              ...newState,
+              userPreference: newPreference,
+              selectedSigners: [componentId]
+            };
+          }
+        } else if (type === 'wallet') {
+          // 选择软件钱包
+          return {
+            ...newState,
+            selectedWallet: componentId
+          };
+        } else if (type === 'node') {
+          // 选择区块链节点
+          return {
+            ...newState,
+            selectedNode: componentId
+          };
+        }
+        
+        return newState;
+      });
+      return;
+    }
+    
+    // 如果点击的是呼吸状态（breathing）或已选中（active）的选项，执行级联选择逻辑
     if (type === 'signer') {
       setState(prev => {
         const isSelected = prev.selectedSigners.includes(componentId);
-        const currentState = getComponentState(componentId, type);
         
-        // 如果点击的是"不使用签名器"，更新用户意愿
-        if (componentId === 'none') {
-          const newPreference = {
-            ...prev.userPreference!,
-            signerWillingness: 'no-signer' as const
-          };
-          localStorage.setItem('userPreference', JSON.stringify(newPreference));
-          
-          return {
-            ...prev,
-            userPreference: newPreference,
-            selectedSigners: [componentId],
-            selectedWallet: null,
-            selectedNode: null
-          };
-        }
-        
-        // 如果之前选择了"不使用签名器"，现在选择其他签名器，更新意愿
-        if (prev.selectedSigners.includes('none') && componentId !== 'none') {
-          const newPreference = {
-            ...prev.userPreference!,
-            signerWillingness: 'with-signer' as const
-          };
-          localStorage.setItem('userPreference', JSON.stringify(newPreference));
-          
-          return {
-            ...prev,
-            userPreference: newPreference,
-            selectedSigners: [componentId],
-            selectedWallet: null,
-            selectedNode: null
-          };
-        }
-        
-        if (currentState === 'inactive') {
-          // 重置其他选择并选择新的签名器
-          return {
-            ...prev,
-            selectedSigners: [componentId],
-            selectedWallet: null,
-            selectedNode: null
-          };
-        } else if (isSelected) {
+        if (isSelected) {
           // 取消选择
           return {
             ...prev,
-            selectedSigners: prev.selectedSigners.filter(id => id !== componentId)
+            selectedSigners: prev.selectedSigners.filter(id => id !== componentId),
+            selectedWallet: null,
+            selectedNode: null
           };
         } else {
           // 添加到选择中（多签模式）
@@ -218,41 +245,37 @@ function App() {
       });
     } else if (type === 'wallet') {
       setState(prev => {
-        const currentState = getComponentState(componentId, type);
-        
-        if (currentState === 'inactive') {
-          // 重置并选择新钱包
-          return {
-            ...prev,
-            selectedWallet: componentId,
-            selectedNode: null
-          };
-        } else if (prev.selectedWallet === componentId) {
+        if (prev.selectedWallet === componentId) {
           // 取消选择
           return {
             ...prev,
-            selectedWallet: null
+            selectedWallet: null,
+            selectedNode: null
           };
         } else {
           // 选择新钱包
           return {
             ...prev,
-            selectedWallet: componentId
+            selectedWallet: componentId,
+            selectedNode: null // 清除节点选择，重新开始级联
           };
         }
       });
     } else if (type === 'node') {
       setState(prev => {
-        const currentState = getComponentState(componentId, type);
-        
-        if (currentState !== 'inactive') {
+        if (prev.selectedNode === componentId) {
+          // 取消选择
           return {
             ...prev,
-            selectedNode: prev.selectedNode === componentId ? null : componentId
+            selectedNode: null
+          };
+        } else {
+          // 选择新节点
+          return {
+            ...prev,
+            selectedNode: componentId
           };
         }
-        
-        return prev;
       });
     }
   };
