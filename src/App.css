@@ -26,6 +26,12 @@ body {
   background: #f8fafc;
   padding: 20px 0;
   border-bottom: 1px solid #e2e8f0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  width: 100%;
 }
 
 .header-content {
@@ -242,6 +248,7 @@ body {
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
+  padding-top: 120px; /* 为顶部固定Header预留空间：Header高度约100px + 余量20px */
   padding-bottom: 380px; /* 为底部固定特性框预留空间：特性框高度348px + 底部间距20px + 余量12px */
 }
 
