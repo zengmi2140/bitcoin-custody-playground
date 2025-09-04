@@ -44,6 +44,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   const getTransferMethodClass = (method: string): string => {
     const methodClassMap: { [key: string]: string } = {
       'SD卡': 'sd-card',
+      'microSD 卡': 'sd-card', // 添加对 microSD 卡的支持
       '二维码': 'qr-code', 
       'USB': 'usb',
       '蓝牙': 'bluetooth',

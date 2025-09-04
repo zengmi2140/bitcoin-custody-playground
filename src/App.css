@@ -587,7 +587,6 @@ body {
   white-space: nowrap;
   border: none; /* 移除边框 */
   transition: all 0.2s ease;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
   background: #e5e7eb !important; /* 更明显的灰色背景，添加!important确保显示 */
   color: #374151 !important; /* 更深的文字颜色，添加!important确保显示 */
@@ -604,7 +603,6 @@ body {
   white-space: nowrap;
   border: none; /* 移除边框 */
   transition: all 0.2s ease;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #374151; /* 默认深灰色文字 */
 }
