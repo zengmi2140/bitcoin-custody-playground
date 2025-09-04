@@ -12,11 +12,12 @@
 
 ### 1.3 技术栈
 - **前端框架**：React 18.2.0 + TypeScript 4.9.0
-- **构建工具**：Create React App (react-scripts 5.0.1)
-- **样式方案**：纯CSS（无外部UI库）
+- **构建工具**：Vite 5.4.0 + @vitejs/plugin-react
+- **样式方案**：TailwindCSS 4.1.12 + 自定义CSS
 - **状态管理**：React useState + useEffect
 - **数据存储**：JSON文件 + LocalStorage（用户偏好）
 - **数据加载**：异步fetch + 备用数据机制
+- **开发服务器**：Vite Dev Server (端口8080)
 
 ## 2. 架构设计
 
@@ -25,21 +26,35 @@
 bitcoin-custody-website/
 ├── public/                    # 静态资源
 │   ├── index.html              # HTML模板
-│   └── custody-data.json       # 核心数据文件（JSON驱动）
+│   ├── custody-data.json       # 核心数据文件（JSON驱动）
+│   └── images/                 # 图片资源
+│       ├── logos/              # 组件Logo图片
+│       │   ├── hardware/       # 硬件签名器Logo
+│       │   ├── software/       # 软件钱包Logo
+│       │   └── nodes/          # 区块链节点Logo
+│       └── icons/              # 图标资源
 ├── src/
 │   ├── components/           # 组件目录
 │   │   ├── Header.tsx           # 顶部进度条和操作区
 │   │   ├── InitialGuide.tsx     # 初始引导组件
 │   │   ├── MainLayout.tsx       # 主布局组件
 │   │   ├── ComponentColumn.tsx  # 组件列显示
+│   │   └── BottomFeatureDock.tsx # 底部特性展示
 │   ├── App.tsx              # 主应用组件
 │   ├── App.css              # 主样式文件
+│   ├── index.css            # 全局样式
 │   ├── types.ts             # TypeScript类型定义
 │   ├── data.ts              # 备用数据配置
 │   ├── dataLoader.ts        # 数据加载器
-│   └── index.tsx            # 应用入口
-├── build/                   # 构建输出目录
+│   └── main.tsx             # 应用入口
+├── dist/                    # 构建输出目录
+├── scripts/                 # 数据同步脚本
+│   ├── sync-airtable.js     # Airtable数据同步
+│   ├── config/              # 配置文件
+│   └── output/              # 输出文件
 ├── package.json             # 项目配置
+├── vite.config.ts           # Vite配置
+├── tailwind.config.js       # TailwindCSS配置
 ├── tsconfig.json           # TypeScript配置
 ├── PRD-项目详细需求文档.md   # 项目文档
 ├── 进度条规则配置.md         # 进度条规则文档
@@ -48,16 +63,39 @@ bitcoin-custody-website/
 
 ### 2.2 组件层级关系
 ```
-App
-├── InitialGuide (条件渲染)
-├── Header
-└── MainLayout
-    ├── ComponentColumn (硬件签名器) [条件渲染]
-    ├── DataFlow (数据流箭头)
-    ├── ComponentColumn (软件钱包)
-    ├── DataFlow (数据流箭头)
-    └── ComponentColumn (区块链节点)
-└── BottomFeatures (底部特性框)
+App (根组件)
+├── InitialGuide (条件渲染 - 全屏覆盖)
+├── Header (固定顶部)
+│   ├── progress-section (进度条区域)
+│   │   ├── progress-bar-container (进度条容器)
+│   │   │   ├── progress-bar (进度条)
+│   │   │   └── progress-percentage (百分比文字)
+│   │   └── celebration-emoji (庆祝emoji - 120%时显示)
+│   └── header-actions (右上角操作区)
+│       ├── signature-mode-selector (签名模式选择器)
+│       └── reset-button (重置按钮)
+└── MainLayout (主布局)
+    ├── layout-container.three-column (三列布局容器)
+    │   ├── ComponentColumn (硬件签名器列)
+    │   │   ├── column-title (列标题)
+    │   │   └── components-grid (组件网格)
+    │   │       └── component-item × N (组件项)
+    │   │           ├── component-logo (组件图标)
+    │   │           └── component-name (组件名称)
+    │   ├── data-flow (第一个数据流)
+    │   │   ├── flow-arrow (→ 签名和公钥)
+    │   │   ├── transfer-methods (传输方式标签)
+    │   │   └── flow-arrow.left-arrow (← 待签名交易)
+    │   ├── ComponentColumn (软件钱包列)
+    │   ├── data-flow (第二个数据流)
+    │   │   ├── flow-arrow (→ 地址；已签名交易)
+    │   │   ├── transfer-methods.placeholder (占位区域)
+    │   │   └── flow-arrow.left-arrow (← 余额信息)
+    │   └── ComponentColumn (区块链节点列)
+    └── BottomFeatureDock (底部特性展示 - 固定定位)
+        ├── feature-box.signer (硬件签名器特性框)
+        ├── feature-box.wallet (软件钱包特性框)
+        └── feature-box.node (区块链节点特性框)
 ```
 
 ## 3. 核心功能模块
@@ -125,10 +163,9 @@ const getCompletionPercentage = (): number => {
 interface HardwareSigner {
   id: string;                    // 唯一标识
   name: string;                  // 显示名称
-  logo: string;                  // emoji图标
+  logo: string;                  // 图片路径或emoji图标
   features: Feature[];           // 特性列表
   compatibleWallets: string[];   // 兼容钱包ID列表
-  dataTransferMethods: string[]; // 数据传输方式
 }
 
 // 软件钱包（包括设备平台支持）
@@ -157,11 +194,20 @@ interface Feature {
   text: string;                                // 特性描述
 }
 
-// 传输方式映射（新增）
+// 传输方式映射
 interface TransferMethods {
   [signerId: string]: {
     [walletId: string]: string[];  // 传输方式列表
   };
+}
+
+// 组件状态类型
+type ComponentState = 'inactive' | 'breathing' | 'active';
+
+// 用户偏好类型
+interface UserPreference {
+  deviceType: 'mobile' | 'desktop';
+  signerWillingness: 'no-signer' | 'with-signer';
 }
 ```
 
@@ -180,6 +226,26 @@ type ComponentState = 'inactive' | 'breathing' | 'active';
 - **向后兼容**：选择钱包后，显示兼容的节点（breathing状态）
 - **互斥选择**：同列中选择新项目会取消其他选择
 - **依赖清除**：选择不兼容项目会清除下游选择
+- **排序逻辑**：硬件签名器列表中"不使用签名器"始终排在最后
+
+#### 3.3.4 Logo渲染逻辑
+```typescript
+// Logo类型判断
+const isEmoji = (str: string): boolean => {
+  // 检查是否为图片路径（以/开头或http开头）
+  if (str.startsWith('/') || str.startsWith('http')) {
+    return false; // 图片路径
+  }
+  // 检查是否为emoji（常见emoji字符或长度<=4）
+  const commonEmojis = ['🔒', '❄️', '📱', '💳', '📦', '🚫', '🐦', '⚡', '💙', '🥋', '🟢', '🌿', '₿', '🔌', '🔗', '🌐', '💎', '🌱'];
+  return commonEmojis.includes(str) || str.length <= 4;
+};
+
+// 特殊处理："不使用签名器"始终使用emoji
+if (componentId === 'none') {
+  return <span className="component-logo-emoji">{logo}</span>;
+}
+```
 
 ### 3.4 数据流可视化系统
 
@@ -218,9 +284,9 @@ type ComponentState = 'inactive' | 'breathing' | 'active';
 - **响应式**：桌面水平、移动垂直
 - **双向数据流**：硬件签名器和软件钱包之间显示两个方向的箭头
 
-### 3.5 特性展示系统
+### 3.5 底部特性展示系统 (BottomFeatureDock)
 
-#### 3.5.1 布局策略（更新：采用“方案A 定位同步”）
+#### 3.5.1 布局策略（采用"定位同步"方案）
 - **底部固定定位（悬浮）**：特性框始终固定在页面底部，随页面滚动保持可见
 - **定位同步对齐**：通过 JavaScript 测量上方三列容器（`ComponentColumn`）的实际像素位置，计算各列的水平中心点，将底部三个特性框分别以 `position: fixed; bottom: 20px; left: <columnCenterX>` 排布，并用 `transform: translateX(-50%)` 做精确居中，确保与各自对应列垂直对齐
 - **桌面端优先**：当前版本仅实现桌面端；移动端对齐策略暂不实现
@@ -228,27 +294,66 @@ type ComponentState = 'inactive' | 'breathing' | 'active';
 - **底边距（固定值）**：特性框底边距固定为 `bottom: 20px`
 - **样式沿用**：特性框外观、配色、阴影沿用现有 `.feature-box`、`.feature-item` 等样式定义
 
-#### 3.5.2 对齐算法
+#### 3.5.2 对齐算法实现
 ```typescript
-// 三列模式位置计算
-const threeColumnLayout = {
-  gridTemplateColumns: '1fr auto 1fr auto 1fr',
-  gap: '60px',
-  hardwareSignerColumn: 1,
-  firstDataFlow: 2,
-  softwareWalletColumn: 3,
-  secondDataFlow: 4,
-  blockchainNodeColumn: 5
+// 位置测量和同步算法
+const measure = () => {
+  const getTitleCenter = (columnEl?: HTMLElement | null): number | undefined => {
+    if (!columnEl) return undefined;
+    const titleEl = columnEl.querySelector('.column-title') as HTMLElement | null;
+    if (!titleEl) return undefined;
+
+    // 优先尝试以文本节点边界为基准
+    const textNode = Array.from(titleEl.childNodes).find(n => n.nodeType === Node.TEXT_NODE) as Text | undefined;
+    try {
+      if (textNode && textNode.textContent && textNode.textContent.trim().length > 0) {
+        const range = document.createRange();
+        range.selectNodeContents(textNode);
+        const rect = range.getBoundingClientRect();
+        return Math.round(rect.left + rect.width / 2);
+      }
+    } catch (_) {
+      // 忽略 Range 失败，退化为元素盒模型
+    }
+
+    const rect = titleEl.getBoundingClientRect();
+    return Math.round(rect.left + rect.width / 2);
+  };
+
+  setCenters({
+    signer: getTitleCenter(signerRef.current),
+    wallet: getTitleCenter(walletRef.current),
+    node: getTitleCenter(nodeRef.current)
+  });
 };
 
-// 两列模式位置计算
-const twoColumnLayout = {
-  gridTemplateColumns: '1fr auto 1fr',
-  gap: '60px',
-  softwareWalletColumn: 1,
-  dataFlow: 2,
-  blockchainNodeColumn: 3
-};
+// 监听布局变化
+useLayoutEffect(() => {
+  const observeTargets: (Element | null)[] = [];
+  const ro = new ResizeObserver(() => measure());
+
+  // 初次测量：等字体就绪后再次测量，避免字体替换引起的宽度变化
+  measure();
+  if ((document as any).fonts && (document as any).fonts.ready) {
+    (document as any).fonts.ready.then(() => measure()).catch(() => {});
+  }
+
+  // 监听标题元素而非整列容器，减少外层补偿的干扰
+  [signerRef.current, walletRef.current, nodeRef.current].forEach(col => {
+    const titleEl = col?.querySelector('.column-title') || null;
+    if (titleEl) {
+      ro.observe(titleEl);
+      observeTargets.push(titleEl);
+    }
+  });
+
+  window.addEventListener('resize', measure);
+  return () => {
+    window.removeEventListener('resize', measure);
+    observeTargets.forEach(t => t && ro.unobserve(t));
+    ro.disconnect();
+  };
+}, []);
 ```
 
 #### 3.5.3 特性分类显示
@@ -340,37 +445,40 @@ useLayoutEffect(() => {
 
 ### 4.1 硬件签名器数据
 ```typescript
-// 当前包含6个选项（包括"不使用签名器"）
+// 当前包含7个选项（包括"不使用签名器"）
 [
-  { id: 'trezor', name: 'Trezor', logo: '🔒' },
-  { id: 'coldcard', name: 'ColdCard', logo: '❄️' },
-  { id: 'keystone', name: 'Keystone', logo: '📱' },
-  { id: 'ledger', name: 'Ledger', logo: '💳' },
-  { id: 'bitbox', name: 'BitBox02', logo: '📦' },
-  { id: 'none', name: '不使用签名器', logo: '🚫' }  // 新增选项
+  { id: 'coldcard', name: 'Coldcard', logo: '/images/logos/hardware/coldcard.jpg' },
+  { id: 'ledger', name: 'Ledger', logo: '/images/logos/hardware/ledger.jpg' },
+  { id: 'trezor', name: 'Trezor', logo: '/images/logos/hardware/trezor.png' },
+  { id: 'bitbox', name: 'BitBox02', logo: '/images/logos/hardware/bitbox.png' },
+  { id: 'jade', name: 'Jade', logo: '/images/logos/hardware/jade.jpg' },
+  { id: 'keystone', name: 'Keystone', logo: '/images/logos/hardware/keystone.jpg' },
+  { id: 'seedsigner', name: 'SeedSigner', logo: '/images/logos/hardware/seedsigner.png' },
+  { id: 'none', name: '不使用签名器', logo: '🚫' }  // 始终使用emoji
 ]
 ```
 
 ### 4.2 软件钱包数据
 ```typescript
-// 当前包含5个主流软件钱包
+// 当前包含6个主流软件钱包
 [
-  { id: 'sparrow', name: 'Sparrow Wallet', logo: '🐦' },
-  { id: 'electrum', name: 'Electrum', logo: '⚡' },
-  { id: 'bluewallet', name: 'BlueWallet', logo: '💙' },
-  { id: 'specter', name: 'Specter Desktop', logo: '👻' },
-  { id: 'bitcoin-core-wallet', name: 'Bitcoin Core Wallet', logo: '₿' }
+  { id: 'sparrow', name: 'Sparrow Wallet', logo: '/images/logos/software/sparrow.png' },
+  { id: 'electrum', name: 'Electrum', logo: '/images/logos/software/electrum.jpg' },
+  { id: 'bluewallet', name: 'BlueWallet', logo: '/images/logos/software/bluewallet.png' },
+  { id: 'nunchuk', name: 'Nunchuk', logo: '/images/logos/software/nunchuk.png' },
+  { id: 'liana', name: 'Liana', logo: '/images/logos/software/liana.jpg' },
+  { id: 'green', name: 'Green', logo: '/images/logos/software/green.jpg' }
 ]
 ```
 
 ### 4.3 区块链节点数据
 ```typescript
-// 当前包含3个节点选项（增加了更多详细信息）
+// 当前包含3个节点选项
 [
   { 
     id: 'bitcoin-core', 
     name: 'Bitcoin Core', 
-    logo: '🟠',
+    logo: '/images/logos/nodes/bitcoin-core.png',
     features: [
       { type: 'positive', text: '完整验证所有交易' },
       { type: 'positive', text: '最高安全性' },
@@ -379,25 +487,25 @@ useLayoutEffect(() => {
     ]
   },
   { 
-    id: 'electrum-server', 
-    name: 'Electrum Server', 
-    logo: '🔌',
+    id: 'bitcoinknots', 
+    name: 'Bitcoin Knots', 
+    logo: '/images/logos/nodes/bitcoinknots.jpg',
+    features: [
+      { type: 'positive', text: '基于Bitcoin Core' },
+      { type: 'positive', text: '额外隐私功能' },
+      { type: 'negative', text: '需要大量存储空间' },
+      { type: 'warning', text: '社区维护版本' }
+    ]
+  },
+  { 
+    id: 'electrs', 
+    name: 'Electrs', 
+    logo: '/images/logos/nodes/electrs.png',
     features: [
       { type: 'positive', text: '快速同步' },
       { type: 'positive', text: '隐私友好' },
       { type: 'negative', text: '依赖Bitcoin Core' },
       { type: 'warning', text: '需要额外设置' }
-    ]
-  },
-  { 
-    id: 'blockstream', 
-    name: 'Blockstream Green', 
-    logo: '🌿',
-    features: [
-      { type: 'positive', text: '免费使用' },
-      { type: 'positive', text: '快速同步' },
-      { type: 'negative', text: '依赖第三方' },
-      { type: 'warning', text: '隐私性较低' }
     ]
   }
 ]
@@ -439,25 +547,33 @@ transferMethods: {
 ### 5.1 首次访问流程
 ```mermaid
 graph TD
-A[访问网站] --> B[显示InitialGuide]
-B --> C[选择设备类型]
-C --> D[选择签名器态度]
-D --> E[保存到localStorage]
-E --> F[进入主界面]
-F --> G[显示对应布局]
+A[访问网站] --> B[检查localStorage]
+B -->|有偏好| C[直接进入主界面]
+B -->|无偏好| D[显示InitialGuide]
+D --> E[选择设备类型]
+E --> F[选择签名器态度]
+F --> G[保存到localStorage]
+G --> H[进入主界面]
+H --> I[显示对应布局]
+C --> I
 ```
 
 ### 5.2 组件选择流程
 ```mermaid
 graph TD
 A[查看组件列表] --> B[点击组件]
-B --> C{检查兼容性}
-C -->|兼容| D[更新选择状态]
-C -->|不兼容| E[清除不兼容选择]
-E --> D
-D --> F[更新其他列状态]
-F --> G[更新进度条]
-G --> H[显示底部特性]
+B --> C{检查当前状态}
+C -->|inactive| D[执行重置逻辑]
+C -->|breathing/active| E[执行级联选择逻辑]
+D --> F[根据类型设置选择]
+E --> G{检查兼容性}
+G -->|兼容| H[更新选择状态]
+G -->|不兼容| I[清除不兼容选择]
+I --> H
+H --> J[更新其他列状态]
+J --> K[更新进度条]
+K --> L[显示底部特性]
+F --> J
 ```
 
 ### 5.3 状态管理流程
@@ -469,6 +585,36 @@ C --> D[更新组件状态]
 D --> E[重新渲染UI]
 E --> F[更新进度条]
 F --> G[更新特性显示]
+G --> H[更新传输方式标签]
+```
+
+### 5.4 组件状态计算逻辑
+```typescript
+// 签名器状态计算
+if (type === 'signer') {
+  // 已选中的签名器显示为active
+  if (state.selectedSigners.includes(componentId)) return 'active';
+  
+  // 如果该列已有选中项，其他项不呼吸
+  if (state.selectedSigners.length > 0) {
+    return 'inactive';
+  }
+  
+  // 检查与当前选择的钱包是否兼容（反向兼容）
+  if (state.selectedWallet) {
+    const wallet = state.custodyData.softwareWallets.find(w => w.id === state.selectedWallet);
+    if (wallet && wallet.compatibleSigners.includes(componentId)) {
+      return 'breathing';
+    }
+  }
+  
+  // 初始状态：如果用户选择了"愿意尝试硬件签名器"，硬件签名器列呼吸
+  if (state.userPreference.signerWillingness === 'with-signer' && state.selectedWallet === null && state.selectedNode === null) {
+    return 'breathing';
+  }
+  
+  return 'inactive';
+}
 ```
 
 ## 6. 技术实现细节
@@ -483,6 +629,15 @@ interface AppState {
   showGuide: boolean;               // 是否显示引导
   custodyData: CustodyData | null;  // 动态加载的数据
   isLoading: boolean;               // 数据加载状态
+}
+
+// 完整的数据结构
+interface CustodyData {
+  hardwareSigners: HardwareSigner[];
+  softwareWallets: SoftwareWallet[];
+  nodes: BlockchainNode[];
+  connections: Connection[];
+  transferMethods: Record<string, Record<string, string[]>>;
 }
 ```
 
@@ -508,6 +663,15 @@ getTransferMethodClass(method: string): string
 
 // 数据异步加载
 loadCustodyData(): Promise<CustodyData>
+
+// 用户偏好设置
+handlePreferenceSet(preference: UserPreference): void
+
+// 重置偏好
+handleResetPreference(): void
+
+// 位置测量（用于底部特性框对齐）
+measure(): void
 ```
 
 ### 6.3 响应式设计策略
@@ -515,6 +679,7 @@ loadCustodyData(): Promise<CustodyData>
 - **布局切换**：Grid → Flex → Stack
 - **组件适配**：水平箭头 → 垂直箭头
 - **间距调整**：桌面端60px → 移动端40px
+- **字体加载优化**：等待字体就绪后重新测量位置
 
 ### 6.4 性能优化措施
 - **useEffect依赖数组优化**：避免不必要的重渲染
@@ -523,6 +688,39 @@ loadCustodyData(): Promise<CustodyData>
 - **条件渲染**：传输标签仅在需要时显示，减少DOM节点
 - **CSS动画优化**：使用transform和opacity，启用硬件加速
 - **响应式布局**：CSS Grid和Flexbox，减少JavaScript计算
+- **ResizeObserver优化**：监听特定元素而非整个窗口
+- **位置测量优化**：使用getBoundingClientRect和Range API精确测量
+- **字体加载监听**：document.fonts.ready确保字体加载完成后再测量
+
+### 6.5 Vite构建配置
+```typescript
+// vite.config.ts
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  server: {
+    host: "::",
+    port: 8080,
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    target: 'esnext',
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html')
+      }
+    }
+  },
+  define: {
+    global: 'globalThis',
+  },
+})
+```
 
 ## 9. 样式设计规范
 
@@ -746,14 +944,21 @@ npm run test             # 运行测试
 ```json
 {
   "dependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^5.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^4.9.0"
+    "tailwindcss": "^4.1.12",
+    "typescript": "^4.9.0",
+    "vite": "^5.4.0",
+    "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "react-scripts": "5.0.1",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0"
+    "airtable": "^0.12.2",
+    "dotenv": "^17.2.1",
+    "gh-pages": "^6.3.0"
   }
 }
 ```
@@ -772,8 +977,15 @@ npm run test             # 运行测试
 
 ---
 
-**文档版本**: v2.0
+**文档版本**: v3.0
 **最后更新**: 2025年1月
 **维护人员**: 产品开发团队
 **项目状态**: 生产就绪
-**技术架构**: JSON数据驱动 + React组件化
+**技术架构**: Vite + React + TypeScript + TailwindCSS + JSON数据驱动
+**主要更新**: 
+- 升级到Vite构建系统
+- 集成TailwindCSS样式框架
+- 实现BottomFeatureDock底部特性展示
+- 优化位置测量和对齐算法
+- 移除未使用的FeaturesDisplay组件
+- 完善Logo渲染逻辑（图片/emoji自动识别）
