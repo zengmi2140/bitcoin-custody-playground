@@ -387,18 +387,6 @@ body {
   transition: all 0.3s ease !important;
 }
 
-/* 测试媒体查询是否工作 */
-@media (max-width: 1600px) {
-  .data-flow {
-    /* 中等屏幕：红色边框 */
-  }
-}
-
-@media (min-width: 1601px) {
-  .data-flow {
-    /* 超大屏幕：蓝色边框 */
-  }
-}
 
 
 
@@ -1131,10 +1119,6 @@ body {
     font-size: 2.5rem;
   }
   
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
   
   .choice-cards {
     grid-template-columns: 1fr;
@@ -1166,10 +1150,6 @@ body {
     padding: 6px 12px;
   }
   
-  .features-display {
-    padding: 20px;
-    margin-top: 30px;
-  }
   
   .components-grid {
     grid-template-columns: repeat(2, 1fr);

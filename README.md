@@ -76,7 +76,6 @@ soft-hard-wallet/
 │   │   ├── Header.tsx     # 页面头部组件
 │   │   ├── MainLayout.tsx # 主布局组件
 │   │   ├── ComponentColumn.tsx # 组件列展示
-│   │   ├── FeaturesDisplay.tsx # 特性展示
 │   │   └── InitialGuide.tsx   # 初始引导
 │   ├── types.ts           # TypeScript类型定义
 │   ├── data.ts            # 静态数据

@@ -32,7 +32,6 @@ bitcoin-custody-website/
 │   │   ├── InitialGuide.tsx     # 初始引导组件
 │   │   ├── MainLayout.tsx       # 主布局组件
 │   │   ├── ComponentColumn.tsx  # 组件列显示
-│   │   └── FeaturesDisplay.tsx  # 特性显示组件
 │   ├── App.tsx              # 主应用组件
 │   ├── App.css              # 主样式文件
 │   ├── types.ts             # TypeScript类型定义
