@@ -710,16 +710,19 @@ body {
 
 .components-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 120px); /* 固定宽度120px */
   gap: 20px;
   width: 100%;
-  max-width: 400px;
+  max-width: 400px; /* 保持原有最大宽度限制 */
+  /* 确保网格单元格等宽 */
+  grid-auto-rows: 1fr;
 }
 
 .component-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   padding: 20px;
   border-radius: 12px;
   cursor: pointer;
@@ -727,6 +730,12 @@ body {
   border: 2px solid transparent;
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* 确保卡片完全填充网格单元格 */
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  /* 防止内容溢出影响宽度 */
+  overflow: hidden;
 }
 
 .component-item:hover {
@@ -792,6 +801,18 @@ body {
   font-weight: 500;
   text-align: center;
   color: #2d3748;
+  /* 确保文本不会影响卡片宽度 */
+  width: 100%;
+  word-wrap: break-word;
+  hyphens: auto;
+  /* 限制文本行数，防止高度不一致 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  max-height: 2.4em; /* 2行文本的高度 */
 }
 
 /* 页面底部的三个特性框 - 简单底部定位 */
@@ -1107,12 +1128,19 @@ body {
   }
   
   .components-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 160px); /* 移动端固定宽度160px */
     gap: 15px;
+    /* 确保移动端也保持等宽 */
+    grid-auto-rows: 1fr;
   }
   
   .component-item {
     padding: 15px;
+    /* 移动端也保持完全填充 */
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
   }
   
   .component-logo {
@@ -1152,12 +1180,19 @@ body {
   
   
   .components-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 140px); /* 小屏幕固定宽度140px */
     gap: 10px;
+    /* 确保小屏幕也保持等宽 */
+    grid-auto-rows: 1fr;
   }
   
   .component-item {
     padding: 12px;
+    /* 小屏幕也保持完全填充 */
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
   }
   
   .component-logo {
