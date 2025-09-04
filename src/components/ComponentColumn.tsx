@@ -8,7 +8,6 @@ interface Component {
 }
 
 interface ComponentColumnProps {
-  title: string;
   components: Component[];
   selectedComponents: string[];
   getComponentState: (componentId: string) => ComponentState;
@@ -62,8 +61,7 @@ const renderLogo = (logo: string, componentId: string) => {
   );
 };
 
-const ComponentColumn = React.forwardRef<HTMLDivElement, ComponentColumnProps>(({
-  title,
+const ComponentColumn = React.forwardRef<HTMLDivElement, ComponentColumnProps>(({ 
   components,
   selectedComponents,
   getComponentState,
@@ -71,29 +69,26 @@ const ComponentColumn = React.forwardRef<HTMLDivElement, ComponentColumnProps>((
   type
 }, ref) => {
   return (
-    <div className="component-column" ref={ref}>
-      <h2 className="column-title">{title}</h2>
-      <div className="components-grid">
-        {components.map((component) => {
-          const state = getComponentState(component.id);
-          const isSelected = selectedComponents.includes(component.id);
-          
-          return (
-            <div
-              key={component.id}
-              className={`component-item ${state} ${isSelected ? 'selected' : ''}`}
-              onClick={() => onComponentClick(component.id)}
-            >
-              <div className="component-logo">
-                {renderLogo(component.logo, component.id)}
-              </div>
-              <div className="component-name">
-                {component.name}
-              </div>
+    <div className="components-grid">
+      {components.map((component) => {
+        const state = getComponentState(component.id);
+        const isSelected = selectedComponents.includes(component.id);
+
+        return (
+          <div
+            key={component.id}
+            className={`component-item ${state} ${isSelected ? 'selected' : ''}`}
+            onClick={() => onComponentClick(component.id)}
+          >
+            <div className="component-logo">
+              {renderLogo(component.logo, component.id)}
             </div>
-          );
-        })}
-      </div>
+            <div className="component-name">
+              {component.name}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 });

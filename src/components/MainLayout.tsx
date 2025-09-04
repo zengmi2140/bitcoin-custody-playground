@@ -1,6 +1,14 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { UserPreference, ComponentState, CustodyData } from '../types';
 import ComponentColumn from './ComponentColumn';
+import ColumnTitle from './ColumnTitle';
+
+// 列标题常量（写死文案）
+const COLUMN_TITLES = {
+  signer: '硬件签名器',
+  wallet: '软件钱包',
+  node: '区块链节点',
+} as const;
 import BottomFeatureDock from './BottomFeatureDock';
 
 interface MainLayoutProps {
@@ -65,16 +73,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({
 
   const transferMethods = getTransferMethods();
 
-  const signerRef = useRef<HTMLDivElement>(null);
-  const walletRef = useRef<HTMLDivElement>(null);
-  const nodeRef = useRef<HTMLDivElement>(null);
+  const signerTitleRef = useRef<HTMLHeadingElement>(null);
+  const walletTitleRef = useRef<HTMLHeadingElement>(null);
+  const nodeTitleRef = useRef<HTMLHeadingElement>(null);
 
   const [centers, setCenters] = useState<{ signer?: number; wallet?: number; node?: number }>({});
 
   const measure = () => {
-    const getTitleCenter = (columnEl?: HTMLElement | null): number | undefined => {
-      if (!columnEl) return undefined;
-      const titleEl = columnEl.querySelector('.column-title') as HTMLElement | null;
+    const getTitleCenter = (titleEl?: HTMLElement | null): number | undefined => {
       if (!titleEl) return undefined;
 
       // 优先尝试以文本节点边界为基准
@@ -95,9 +101,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     };
 
     setCenters({
-      signer: getTitleCenter(signerRef.current),
-      wallet: getTitleCenter(walletRef.current),
-      node: getTitleCenter(nodeRef.current)
+      signer: getTitleCenter(signerTitleRef.current),
+      wallet: getTitleCenter(walletTitleRef.current),
+      node: getTitleCenter(nodeTitleRef.current)
     });
   };
 
@@ -111,9 +117,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       (document as any).fonts.ready.then(() => measure()).catch(() => {});
     }
 
-    // 监听标题元素而非整列容器，减少外层补偿的干扰
-    [signerRef.current, walletRef.current, nodeRef.current].forEach(col => {
-      const titleEl = col?.querySelector('.column-title') || null;
+    // 监听独立标题元素
+    [signerTitleRef.current, walletTitleRef.current, nodeTitleRef.current].forEach(titleEl => {
       if (titleEl) {
         ro.observe(titleEl);
         observeTargets.push(titleEl);
@@ -141,16 +146,17 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     <main className="main-layout">
       <div className="layout-container three-column">
         
-        {/* 硬件签名器列 - 始终显示 */}
-        <ComponentColumn
-          title="硬件签名器"
-          components={sortedHardwareSigners}
-          selectedComponents={selectedSigners}
-          getComponentState={(id: string) => getComponentState(id, 'signer')}
-          onComponentClick={(id: string) => onComponentClick(id, 'signer')}
-          type="signer"
-          ref={signerRef}
-        />
+        {/* 硬件签名器列 - 标题 + 网格（同一列容器内） */}
+        <div className="component-column">
+          <ColumnTitle title={COLUMN_TITLES.signer} ref={signerTitleRef} />
+          <ComponentColumn
+            components={sortedHardwareSigners}
+            selectedComponents={selectedSigners}
+            getComponentState={(id: string) => getComponentState(id, 'signer')}
+            onComponentClick={(id: string) => onComponentClick(id, 'signer')}
+            type="signer"
+          />
+        </div>
         
         <div className="data-flow">
           <div className="flow-arrow">
@@ -173,16 +179,17 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           </div>
         </div>
         
-        {/* 软件钱包列 */}
-        <ComponentColumn
-          title="软件钱包"
-          components={custodyData.softwareWallets}
-          selectedComponents={selectedWallet ? [selectedWallet] : []}
-          getComponentState={(id: string) => getComponentState(id, 'wallet')}
-          onComponentClick={(id: string) => onComponentClick(id, 'wallet')}
-          type="wallet"
-          ref={walletRef}
-        />
+        {/* 软件钱包列 - 标题 + 网格（同一列容器内） */}
+        <div className="component-column">
+          <ColumnTitle title={COLUMN_TITLES.wallet} ref={walletTitleRef} />
+          <ComponentColumn
+            components={custodyData.softwareWallets}
+            selectedComponents={selectedWallet ? [selectedWallet] : []}
+            getComponentState={(id: string) => getComponentState(id, 'wallet')}
+            onComponentClick={(id: string) => onComponentClick(id, 'wallet')}
+            type="wallet"
+          />
+        </div>
         
         <div 
           className="data-flow" 
@@ -208,16 +215,17 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           </div>
         </div>
         
-        {/* 区块链节点列 */}
-        <ComponentColumn
-          title="区块链节点"
-          components={custodyData.nodes}
-          selectedComponents={selectedNode ? [selectedNode] : []}
-          getComponentState={(id: string) => getComponentState(id, 'node')}
-          onComponentClick={(id: string) => onComponentClick(id, 'node')}
-          type="node"
-          ref={nodeRef}
-        />
+        {/* 区块链节点列 - 标题 + 网格（同一列容器内） */}
+        <div className="component-column">
+          <ColumnTitle title={COLUMN_TITLES.node} ref={nodeTitleRef} />
+          <ComponentColumn
+            components={custodyData.nodes}
+            selectedComponents={selectedNode ? [selectedNode] : []}
+            getComponentState={(id: string) => getComponentState(id, 'node')}
+            onComponentClick={(id: string) => onComponentClick(id, 'node')}
+            type="node"
+          />
+        </div>
       </div>
       <BottomFeatureDock
         centers={centers}
