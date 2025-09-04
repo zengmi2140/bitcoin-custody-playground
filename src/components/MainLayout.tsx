@@ -76,34 +76,23 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   const signerTitleRef = useRef<HTMLHeadingElement>(null);
   const walletTitleRef = useRef<HTMLHeadingElement>(null);
   const nodeTitleRef = useRef<HTMLHeadingElement>(null);
+  const signerGridRef = useRef<HTMLDivElement>(null);
+  const walletGridRef = useRef<HTMLDivElement>(null);
+  const nodeGridRef = useRef<HTMLDivElement>(null);
 
   const [centers, setCenters] = useState<{ signer?: number; wallet?: number; node?: number }>({});
 
   const measure = () => {
-    const getTitleCenter = (titleEl?: HTMLElement | null): number | undefined => {
-      if (!titleEl) return undefined;
-
-      // 优先尝试以文本节点边界为基准
-      const textNode = Array.from(titleEl.childNodes).find(n => n.nodeType === Node.TEXT_NODE) as Text | undefined;
-      try {
-        if (textNode && textNode.textContent && textNode.textContent.trim().length > 0) {
-          const range = document.createRange();
-          range.selectNodeContents(textNode);
-          const rect = range.getBoundingClientRect();
-          return Math.round(rect.left + rect.width / 2);
-        }
-      } catch (_) {
-        // 忽略 Range 失败，退化为元素盒模型
-      }
-
-      const rect = titleEl.getBoundingClientRect();
+    const getGridCenter = (gridEl?: HTMLElement | null): number | undefined => {
+      if (!gridEl) return undefined;
+      const rect = gridEl.getBoundingClientRect();
       return Math.round(rect.left + rect.width / 2);
     };
 
     setCenters({
-      signer: getTitleCenter(signerTitleRef.current),
-      wallet: getTitleCenter(walletTitleRef.current),
-      node: getTitleCenter(nodeTitleRef.current)
+      signer: getGridCenter(signerGridRef.current),
+      wallet: getGridCenter(walletGridRef.current),
+      node: getGridCenter(nodeGridRef.current)
     });
   };
 
@@ -117,11 +106,11 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       (document as any).fonts.ready.then(() => measure()).catch(() => {});
     }
 
-    // 监听独立标题元素
-    [signerTitleRef.current, walletTitleRef.current, nodeTitleRef.current].forEach(titleEl => {
-      if (titleEl) {
-        ro.observe(titleEl);
-        observeTargets.push(titleEl);
+    // 监听网格元素尺寸变化
+    [signerGridRef.current, walletGridRef.current, nodeGridRef.current].forEach(gridEl => {
+      if (gridEl) {
+        ro.observe(gridEl);
+        observeTargets.push(gridEl);
       }
     });
 
@@ -155,6 +144,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             getComponentState={(id: string) => getComponentState(id, 'signer')}
             onComponentClick={(id: string) => onComponentClick(id, 'signer')}
             type="signer"
+            ref={signerGridRef}
           />
         </div>
         
@@ -188,6 +178,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             getComponentState={(id: string) => getComponentState(id, 'wallet')}
             onComponentClick={(id: string) => onComponentClick(id, 'wallet')}
             type="wallet"
+            ref={walletGridRef}
           />
         </div>
         
@@ -224,6 +215,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             getComponentState={(id: string) => getComponentState(id, 'node')}
             onComponentClick={(id: string) => onComponentClick(id, 'node')}
             type="node"
+            ref={nodeGridRef}
           />
         </div>
       </div>

@@ -69,7 +69,7 @@ const ComponentColumn = React.forwardRef<HTMLDivElement, ComponentColumnProps>((
   type
 }, ref) => {
   return (
-    <div className="components-grid">
+    <div className="components-grid" ref={ref}>
       {components.map((component) => {
         const state = getComponentState(component.id);
         const isSelected = selectedComponents.includes(component.id);
