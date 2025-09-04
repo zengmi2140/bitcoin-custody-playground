@@ -1128,7 +1128,7 @@ body {
   }
   
   .components-grid {
-    grid-template-columns: repeat(2, 160px); /* 移动端固定宽度160px */
+    grid-template-columns: repeat(2, 120px); /* 移动端固定宽度120px */
     gap: 15px;
     /* 确保移动端也保持等宽 */
     grid-auto-rows: 1fr;
@@ -1180,7 +1180,7 @@ body {
   
   
   .components-grid {
-    grid-template-columns: repeat(2, 140px); /* 小屏幕固定宽度140px */
+    grid-template-columns: repeat(2, 120px); /* 小屏幕固定宽度120px */
     gap: 10px;
     /* 确保小屏幕也保持等宽 */
     grid-auto-rows: 1fr;
