@@ -8,12 +8,12 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference }) => {
   const [isMultiSigTooltipVisible, setIsMultiSigTooltipVisible] = useState(false);
   const getProgressColor = (percentage: number): string => {
-    if (percentage === 0) return '#fbbf24'; // 黄色 - 空状态
-    if (percentage === 50) return '#10b981'; // 浅绿色 - 仅选择硬件签名器
-    if (percentage === 60) return '#059669'; // 深绿色 - "不使用签名器" + 软件钱包
-    if (percentage === 80) return '#16a34a'; // 更深绿色 - "不使用签名器" + 软件钱包 + 节点
-    if (percentage === 100) return '#059669'; // 深绿色 - 硬件签名器 + 软件钱包
-    if (percentage === 120) return '#3b82f6'; // 蓝色 - 完整配置 + 庆祝效果
+    if (percentage === 0) return '#fbbf24';   // 黄色 - 空状态
+    if (percentage === 50) return '#ffcc80';  // 更浅橙色 - 仅选择硬件签名器
+    if (percentage === 60) return '#ffb74d';  // 浅橙色 - "不使用签名器" + 软件钱包
+    if (percentage === 80) return '#ffb74d';  // 浅橙色 - "不使用签名器" + 软件钱包 + 节点
+    if (percentage === 100) return '#ffb74d'; // 浅橙色 - 硬件签名器 + 软件钱包
+    if (percentage === 120) return '#F7931A'; // 比特币橙色 - 完整硬件配置
     return '#fbbf24'; // 默认黄色
   };
 

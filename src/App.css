@@ -192,25 +192,25 @@ body {
 /* 100%时的状态 - 去除右端圆角 */
 .progress-bar.at-hundred {
   width: 83.33% !important;
-  background-color: #059669 !important;
+  background-color: #ffb74d !important;
   border-radius: 10px 0 0 10px;
 }
 
 /* 当进度超过100%时的特殊效果 */
 .progress-bar[style*="120%"] {
   width: 100% !important;
-  background: linear-gradient(90deg, #059669 0%, #059669 83.33%, #3b82f6 83.33%, #3b82f6 100%) !important;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(90deg, #ffb74d 0%, #ffb74d 83.33%, #F7931A 83.33%, #F7931A 100%) !important;
+  box-shadow: 0 0 15px rgba(247, 147, 26, 0.4);
   animation: overflowGlow 1.5s ease-in-out infinite alternate;
   border-radius: 10px;
 }
 
 @keyframes overflowGlow {
   from {
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 15px rgba(247, 147, 26, 0.4);
   }
   to {
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 25px rgba(247, 147, 26, 0.6);
   }
 }
 
