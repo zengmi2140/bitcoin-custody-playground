@@ -12,8 +12,7 @@ export const custodyData: CustodyData = {
         { type: 'negative', text: '不防拆' },
         { type: 'warning', text: '需要通过Trezor Suite连接' }
       ],
-      compatibleWallets: ['sparrow', 'electrum', 'bluewallet'],
-      dataTransferMethods: ['usb', 'sdcard']
+      compatibleWallets: ['sparrow', 'electrum', 'bluewallet']
     },
     {
       id: 'coldcard',
@@ -25,8 +24,7 @@ export const custodyData: CustodyData = {
         { type: 'positive', text: '支持气隙传输' },
         { type: 'warning', text: '需要学习曲线' }
       ],
-      compatibleWallets: ['sparrow', 'electrum', 'specter'],
-      dataTransferMethods: ['sdcard', 'psbt']
+      compatibleWallets: ['sparrow', 'electrum', 'specter']
     },
     {
       id: 'keystone',
@@ -38,8 +36,7 @@ export const custodyData: CustodyData = {
         { type: 'positive', text: '开源硬件' },
         { type: 'negative', text: '体积较大' }
       ],
-      compatibleWallets: ['sparrow', 'bluewallet', 'metamask'],
-      dataTransferMethods: ['qr', 'usb']
+      compatibleWallets: ['sparrow', 'bluewallet', 'metamask']
     },
     {
       id: 'ledger',
@@ -51,8 +48,7 @@ export const custodyData: CustodyData = {
         { type: 'negative', text: '闭源固件' },
         { type: 'warning', text: '历史上有数据泄露' }
       ],
-      compatibleWallets: ['sparrow', 'electrum', 'ledger-live'],
-      dataTransferMethods: ['usb', 'bluetooth']
+      compatibleWallets: ['sparrow', 'electrum', 'ledger-live']
     },
     {
       id: 'bitbox',
@@ -64,8 +60,7 @@ export const custodyData: CustodyData = {
         { type: 'positive', text: '触摸按钮' },
         { type: 'negative', text: '市场占有率较小' }
       ],
-      compatibleWallets: ['sparrow', 'electrum', 'bitbox-app'],
-      dataTransferMethods: ['usb']
+      compatibleWallets: ['sparrow', 'electrum', 'bitbox-app']
     },
     {
       id: 'none',
@@ -77,8 +72,7 @@ export const custodyData: CustodyData = {
         { type: 'positive', text: '使用简便' },
         { type: 'positive', text: '无需额外硬件' }
       ],
-      compatibleWallets: ['sparrow', 'electrum', 'bluewallet', 'specter', 'bitcoin-core-wallet'],
-      dataTransferMethods: []
+      compatibleWallets: ['sparrow', 'electrum', 'bluewallet', 'specter', 'bitcoin-core-wallet']
     }
   ],
   softwareWallets: [

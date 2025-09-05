@@ -14,8 +14,7 @@ export const getFallbackData = (): CustodyData => {
           { type: 'negative', text: '不防拆' },
           { type: 'warning', text: '需要通过Trezor Suite连接' }
         ],
-        compatibleWallets: ['sparrow', 'electrum', 'bluewallet'],
-        dataTransferMethods: ['usb', 'sdcard']
+        compatibleWallets: ['sparrow', 'electrum', 'bluewallet']
       }
     ],
     softwareWallets: [],

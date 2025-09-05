@@ -15,5 +15,3 @@ const ColumnTitle = React.forwardRef<HTMLHeadingElement, ColumnTitleProps>(({ ti
 ColumnTitle.displayName = 'ColumnTitle';
 
 export default ColumnTitle;
-
-

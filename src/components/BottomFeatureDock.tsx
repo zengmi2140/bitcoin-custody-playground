@@ -83,5 +83,3 @@ const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
 };
 
 export default BottomFeatureDock;
-
-
