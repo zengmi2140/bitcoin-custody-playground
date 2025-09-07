@@ -11,27 +11,7 @@
         },
         {
           "type": "positive",
-          "text": "支持 Passphrase（密语）"
-        },
-        {
-          "type": "positive",
-          "text": "安全芯片"
-        },
-        {
-          "type": "positive",
           "text": "Air-gapped 体验"
-        },
-        {
-          "type": "positive",
-          "text": "防拆设计"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
         },
         {
           "type": "warning",
@@ -41,7 +21,6 @@
       "compatibleWallets": [
         "sparrow",
         "nunchuk",
-        "liana",
         "electrum"
       ]
     },
@@ -55,34 +34,17 @@
           "text": "支持 Miniscript"
         },
         {
-          "type": "positive",
-          "text": "防拆设计"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
-        },
-        {
-          "type": "positive",
-          "text": "安全芯片"
-        },
-        {
-          "type": "positive",
-          "text": "支持 Passphrase（密语）"
+          "type": "negative",
+          "text": "固件不开源"
         },
         {
           "type": "negative",
-          "text": "没有开源"
+          "text": "小屏幕"
         }
       ],
       "compatibleWallets": [
         "sparrow",
         "electrum",
-        "liana",
         "nunchuk"
       ]
     },
@@ -92,31 +54,22 @@
       "logo": "/images/logos/hardware/jade.jpg",
       "features": [
         {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
-        },
-        {
-          "type": "positive",
+          "type": "warning",
           "text": "虚拟安全芯片"
         },
         {
           "type": "positive",
-          "text": "支持 Passphrase（密语）"
+          "text": "Air-gapped 体验"
         },
         {
           "type": "positive",
-          "text": "Air-gapped 体验"
+          "text": "支持 Miniscript"
         }
       ],
       "compatibleWallets": [
         "nunchuk",
         "sparrow",
         "electrum",
-        "liana",
         "bluewallet"
       ]
     },
@@ -127,23 +80,15 @@
       "features": [
         {
           "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
           "text": "支持 Taproot 单签名"
         },
         {
           "type": "positive",
-          "text": "支持 P2WSH 多签名"
+          "text": "开源安全芯片"
         },
         {
           "type": "positive",
-          "text": "支持 Passphrase（密语）"
-        },
-        {
-          "type": "positive",
-          "text": "安全芯片"
+          "text": "支持 SLIP39 Shamir 备份"
         }
       ],
       "compatibleWallets": [
@@ -159,27 +104,7 @@
       "features": [
         {
           "type": "positive",
-          "text": "防拆设计"
-        },
-        {
-          "type": "positive",
-          "text": "大屏幕"
-        },
-        {
-          "type": "positive",
           "text": "Air-gapped 体验"
-        },
-        {
-          "type": "positive",
-          "text": "安全芯片"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
         },
         {
           "type": "positive",
@@ -187,11 +112,11 @@
         },
         {
           "type": "positive",
-          "text": "支持 Passphrase（密语）"
+          "text": "掷色子生成种子词"
         },
         {
           "type": "positive",
-          "text": "掷色子生成种子词"
+          "text": "支持 SLIP39 Shamir 备份"
         }
       ],
       "compatibleWallets": [
@@ -219,8 +144,7 @@
         "sparrow",
         "nunchuk",
         "electrum",
-        "bluewallet",
-        "liana"
+        "bluewallet"
       ]
     },
     {
@@ -230,27 +154,7 @@
       "features": [
         {
           "type": "positive",
-          "text": "安全芯片"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
-        },
-        {
-          "type": "positive",
           "text": "支持 Miniscript"
-        },
-        {
-          "type": "positive",
-          "text": "支持 Passphrase（密语）"
-        },
-        {
-          "type": "positive",
-          "text": "防拆设计"
         },
         {
           "type": "positive",
@@ -264,7 +168,6 @@
       "compatibleWallets": [
         "sparrow",
         "nunchuk",
-        "liana",
         "electrum"
       ]
     },
@@ -273,14 +176,6 @@
       "name": "SeedSigner",
       "logo": "/images/logos/hardware/seedsigner.png",
       "features": [
-        {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
-        },
         {
           "type": "warning",
           "text": "自身不存储私钥"
@@ -295,22 +190,25 @@
         },
         {
           "type": "positive",
-          "text": "支持 Passphrase（密语）"
-        },
-        {
-          "type": "positive",
           "text": "Air-gapped 体验"
         },
         {
           "type": "positive",
           "text": "自定义公钥派生路径"
+        },
+        {
+          "type": "positive",
+          "text": "基于通用硬件"
+        },
+        {
+          "type": "negative",
+          "text": "无安全芯片"
         }
       ],
       "compatibleWallets": [
         "sparrow",
         "nunchuk",
-        "bluewallet",
-        "liana"
+        "bluewallet"
       ]
     }
   ],
@@ -322,23 +220,7 @@
       "features": [
         {
           "type": "positive",
-          "text": "UTXO Control"
-        },
-        {
-          "type": "positive",
-          "text": "同时支付多个对象"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
           "text": "支持 Taproot 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
         },
         {
           "type": "positive",
@@ -347,14 +229,6 @@
         {
           "type": "positive",
           "text": "支持 SLIP39 Shamir 备份"
-        },
-        {
-          "type": "positive",
-          "text": "地址本"
-        },
-        {
-          "type": "positive",
-          "text": "支持 Passphrase（密语）"
         },
         {
           "type": "positive",
@@ -383,27 +257,11 @@
       "features": [
         {
           "type": "positive",
-          "text": "UTXO Control"
-        },
-        {
-          "type": "positive",
-          "text": "同时支付多个对象"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
-        },
-        {
-          "type": "positive",
           "text": "支持静默支付"
         },
         {
           "type": "positive",
-          "text": "支持 Passphrase（密语）"
+          "text": "地址描述符 导入/导出"
         }
       ],
       "compatibleSigners": [
@@ -419,80 +277,17 @@
       ]
     },
     {
-      "id": "liana",
-      "name": "Liana",
-      "logo": "/images/logos/software/liana.jpg",
-      "features": [
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 Miniscript"
-        },
-        {
-          "type": "positive",
-          "text": "地址本"
-        },
-        {
-          "type": "positive",
-          "text": "支持 Passphrase（密语）"
-        }
-      ],
-      "compatibleSigners": [
-        "ledger",
-        "seedsigner",
-        "none",
-        "coldcard",
-        "bitbox",
-        "jade"
-      ],
-      "compatibleNodes": [],
-      "supportedPlatforms": [
-        "Desktop"
-      ]
-    },
-    {
       "id": "electrum",
       "name": "Electrum",
       "logo": "/images/logos/software/electrum.jpg",
       "features": [
         {
           "type": "positive",
-          "text": "UTXO Control"
-        },
-        {
-          "type": "positive",
-          "text": "同时支付多个对象"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
-        },
-        {
-          "type": "positive",
           "text": "BIP329 钱包标签导出"
-        },
-        {
-          "type": "positive",
-          "text": "地址本"
         },
         {
           "type": "warning",
           "text": "所生成的种子词并非 BIP39 标准"
-        },
-        {
-          "type": "positive",
-          "text": "支持 Passphrase（密语）"
-        },
-        {
-          "type": "negative",
-          "text": "不支持 Taproot 单签名/多签名"
         }
       ],
       "compatibleSigners": [
@@ -517,27 +312,7 @@
       "features": [
         {
           "type": "positive",
-          "text": "UTXO Control"
-        },
-        {
-          "type": "positive",
-          "text": "同时支付多个对象"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WPKH 单签名"
-        },
-        {
-          "type": "positive",
           "text": "支持 Taproot 单签名"
-        },
-        {
-          "type": "positive",
-          "text": "支持 P2WSH 多签名"
-        },
-        {
-          "type": "positive",
-          "text": "地址本"
         },
         {
           "type": "positive",
@@ -549,15 +324,7 @@
         },
         {
           "type": "positive",
-          "text": "支持 Passphrase（密语）"
-        },
-        {
-          "type": "positive",
           "text": "地址描述符 导入/导出"
-        },
-        {
-          "type": "positive",
-          "text": "支持 Taproot 多签名"
         }
       ],
       "compatibleSigners": [
@@ -617,8 +384,7 @@
         "sparrow",
         "nunchuk",
         "electrum",
-        "bluewallet",
-        "liana"
+        "bluewallet"
       ]
     },
     {
@@ -632,8 +398,7 @@
         }
       ],
       "compatibleWallets": [
-        "sparrow",
-        "liana"
+        "sparrow"
       ]
     },
     {
@@ -668,8 +433,7 @@
         }
       ],
       "compatibleWallets": [
-        "sparrow",
-        "liana"
+        "sparrow"
       ]
     }
   ],
