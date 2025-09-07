@@ -78,6 +78,16 @@ function App() {
         return 'inactive';
       }
       
+      // 特殊处理："不使用签名器"选项
+      if (componentId === 'none') {
+        // 如果用户选择了"愿意尝试硬件签名器"，则"不使用签名器"不呼吸
+        if (state.userPreference.signerWillingness === 'with-signer') {
+          return 'inactive';
+        }
+        // 如果用户选择了"暂不使用"，则"不使用签名器"正常呼吸
+        return 'breathing';
+      }
+      
       // 检查与当前选择的钱包是否兼容（反向兼容）
       if (state.selectedWallet) {
         const wallet = state.custodyData.softwareWallets.find(w => w.id === state.selectedWallet);
@@ -86,7 +96,7 @@ function App() {
         }
       }
       
-      // 初始状态：如果用户选择了"愿意尝试硬件签名器"，硬件签名器列呼吸
+      // 初始状态：如果用户选择了"愿意尝试硬件签名器"，硬件签名器列呼吸（除了"不使用签名器"）
       if (state.userPreference.signerWillingness === 'with-signer' && state.selectedWallet === null && state.selectedNode === null) {
         return 'breathing';
       }
