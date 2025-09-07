@@ -297,7 +297,8 @@ function App() {
     // 新的进度计算逻辑：根据用户在Markdown文档中定义的规则
     const hasWallet = state.selectedWallet !== null;
     const hasSigner = state.selectedSigners.length > 0;
-    const hasNode = state.selectedNode !== null;
+    // 修改：只有当选择的节点不是"默认/公开节点"时，才认为有真正的节点选择
+    const hasNode = state.selectedNode !== null && state.selectedNode !== 'publicnode';
     const hasNoneSigner = state.selectedSigners.includes('none');
     const hasHardwareSigner = state.selectedSigners.some(id => id !== 'none');
     
