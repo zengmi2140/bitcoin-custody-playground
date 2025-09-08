@@ -510,6 +510,11 @@ body {
   border-right: 20px solid #F7931A;
 }
 
+/* 左向箭头的反向动画 */
+.flow-arrow.left-arrow::after {
+  animation: flowDash 2s linear infinite reverse;
+}
+
 /* 桌面端适度延长箭头 */
 @media (min-width: 769px) {
   .flow-arrow::after {
@@ -1141,6 +1146,11 @@ body {
     border-top: 20px solid #F7931A;
     border-bottom: none;
     transform: translateX(-50%);
+  }
+  
+  /* 移动端左向箭头的反向动画 */
+  .flow-arrow.left-arrow::after {
+    animation: flowDashVertical 2s linear infinite reverse;
   }
   
   .arrow {
