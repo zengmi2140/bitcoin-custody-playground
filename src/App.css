@@ -158,12 +158,12 @@ body {
 .celebration-emoji {
   position: absolute;
   top: 50%;
-  left: calc(120% - 75px); /* 向左移动30px：从-45px改为-75px */
+  left: calc(100% + 20px); /* 移动到进度条右边，距离20px */
   transform: translateY(-50%);
   font-size: 28px;
   animation: celebrationBlink 3s ease-in-out;
   animation-fill-mode: forwards;
-  z-index: 5;
+  z-index: 15; /* 提高层级，确保不被按钮挡住 */
 }
 
 /* 闪烁动画 - 3秒内多次闪烁 */
