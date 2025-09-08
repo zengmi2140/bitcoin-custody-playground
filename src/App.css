@@ -859,7 +859,7 @@ body {
   max-width: 350px;
   flex: 1;
   z-index: 20; /* 提升层级，确保悬浮层可见 */
-  height: 348px; /* 统一高度：标题+分割+列表(272)+上下内边距等 */
+  height: 264px; /* 统一高度：标题+分割+列表(188)+上下内边距等 */
 }
 
 .feature-title {
@@ -876,7 +876,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  max-height: 272px; /* 约6.5条特性 */
+  max-height: 188px; /* 约4.5条特性 */
   overflow-y: auto;
 }
 
