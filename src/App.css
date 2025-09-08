@@ -60,8 +60,8 @@ body {
 /* 右上角按钮区域 */
 .header-actions {
   position: absolute;
-  /* 定位到页面右侧，与区块链节点列右边界对齐 */
-  right: 20px; /* 相对于header-content的右边界 */
+  /* 定位到页面右侧，确保按钮完全可见 */
+  right: 10px; /* 减少右边距，确保按钮不被截断 */
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -69,8 +69,8 @@ body {
   gap: 12px;
   z-index: 10;
   
-  /* 向左移动50px */
-  margin-right: -50px;
+  /* 减少向左移动距离，避免按钮超出视窗 */
+  margin-right: -20px;
 }
 
 /* 单签/多签切换按钮 */
