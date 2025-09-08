@@ -74,6 +74,11 @@ const MainLayout: React.FC<MainLayoutProps> = ({
 
   const transferMethods = getTransferMethods();
 
+  // 判断是否选择了"不使用签名器"
+  const isNoSignerSelected = (): boolean => {
+    return selectedSigners.includes('none');
+  };
+
   const signerTitleRef = useRef<HTMLHeadingElement>(null);
   const walletTitleRef = useRef<HTMLHeadingElement>(null);
   const nodeTitleRef = useRef<HTMLHeadingElement>(null);
@@ -149,7 +154,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           />
         </div>
         
-        <div className="data-flow">
+        <div className={`data-flow ${isNoSignerSelected() ? 'disabled' : ''}`}>
           <div className="flow-arrow">
             <span className="arrow">→</span>
             <span className="flow-text">签名和公钥</span>
