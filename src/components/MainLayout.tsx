@@ -87,6 +87,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   const nodeGridRef = useRef<HTMLDivElement>(null);
 
   const [centers, setCenters] = useState<{ signer?: number; wallet?: number; node?: number }>({});
+  const [columnWidths, setColumnWidths] = useState<{ signer?: number; wallet?: number; node?: number }>({});
 
   const measure = () => {
     const getGridCenter = (gridEl?: HTMLElement | null): number | undefined => {
@@ -95,10 +96,23 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       return Math.round(rect.left + rect.width / 2);
     };
 
+    const getGridWidth = (gridEl?: HTMLElement | null): number | undefined => {
+      if (!gridEl) return undefined;
+      const rect = gridEl.getBoundingClientRect();
+      return Math.round(rect.width);
+    };
+
     setCenters({
       signer: getGridCenter(signerGridRef.current),
       wallet: getGridCenter(walletGridRef.current),
       node: getGridCenter(nodeGridRef.current)
+    });
+
+    // 计算每列组件列表的实际宽度
+    setColumnWidths({
+      signer: getGridWidth(signerGridRef.current),
+      wallet: getGridWidth(walletGridRef.current),
+      node: getGridWidth(nodeGridRef.current)
     });
   };
 
@@ -227,6 +241,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       </div>
       <BottomFeatureDock
         centers={centers}
+        columnWidths={columnWidths}
         selectedSigners={selectedSigners}
         selectedWallet={selectedWallet}
         selectedNode={selectedNode}
