@@ -4,6 +4,7 @@ import { CustodyData, Feature } from '../types';
 interface BottomFeatureDockProps {
   centers: { signer?: number; wallet?: number; node?: number };
   columnWidths: { signer?: number; wallet?: number; node?: number };
+  layoutLeft: number;
   selectedSigners: string[];
   selectedWallet: string | null;
   selectedNode: string | null;
@@ -22,6 +23,7 @@ const renderFeatureItems = (features: Feature[]) => {
 const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
   centers,
   columnWidths,
+  layoutLeft,
   selectedSigners,
   selectedWallet,
   selectedNode,
@@ -41,7 +43,7 @@ const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
           className="feature-box signer"
           style={{ 
             ...dockCommonStyle, 
-            left: centers.signer,
+            left: layoutLeft + centers.signer,
             width: columnWidths.signer ? `${columnWidths.signer}px` : 'auto'
           }}
         >
@@ -60,7 +62,7 @@ const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
           className="feature-box wallet"
           style={{ 
             ...dockCommonStyle, 
-            left: centers.wallet,
+            left: layoutLeft + centers.wallet,
             width: columnWidths.wallet ? `${columnWidths.wallet}px` : 'auto'
           }}
         >
@@ -79,7 +81,7 @@ const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
           className="feature-box node"
           style={{ 
             ...dockCommonStyle, 
-            left: centers.node,
+            left: layoutLeft + centers.node,
             width: columnWidths.node ? `${columnWidths.node}px` : 'auto'
           }}
         >

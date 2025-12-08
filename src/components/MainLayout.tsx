@@ -85,34 +85,68 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   const signerGridRef = useRef<HTMLDivElement>(null);
   const walletGridRef = useRef<HTMLDivElement>(null);
   const nodeGridRef = useRef<HTMLDivElement>(null);
+  const layoutRef = useRef<HTMLDivElement>(null);
 
   const [centers, setCenters] = useState<{ signer?: number; wallet?: number; node?: number }>({});
   const [columnWidths, setColumnWidths] = useState<{ signer?: number; wallet?: number; node?: number }>({});
+  const [lanePositions, setLanePositions] = useState<{
+    lane1?: { left: number; width: number };
+    lane2?: { left: number; width: number };
+  }>({});
+  const [layoutLeft, setLayoutLeft] = useState<number>(0);
 
   const measure = () => {
-    const getGridCenter = (gridEl?: HTMLElement | null): number | undefined => {
-      if (!gridEl) return undefined;
+    const layoutRect = layoutRef.current?.getBoundingClientRect();
+    const getGridMetrics = (gridEl?: HTMLElement | null): { center?: number; width?: number; left?: number } => {
+      if (!gridEl || !layoutRect) return {};
       const rect = gridEl.getBoundingClientRect();
-      return Math.round(rect.left + rect.width / 2);
+      return {
+        center: Math.round(rect.left - layoutRect.left + rect.width / 2),
+        width: Math.round(rect.width),
+        left: rect.left - layoutRect.left
+      };
     };
 
-    const getGridWidth = (gridEl?: HTMLElement | null): number | undefined => {
-      if (!gridEl) return undefined;
-      const rect = gridEl.getBoundingClientRect();
-      return Math.round(rect.width);
-    };
+    const signerMetrics = getGridMetrics(signerGridRef.current);
+    const walletMetrics = getGridMetrics(walletGridRef.current);
+    const nodeMetrics = getGridMetrics(nodeGridRef.current);
+
+    setLayoutLeft(layoutRect?.left ?? 0);
 
     setCenters({
-      signer: getGridCenter(signerGridRef.current),
-      wallet: getGridCenter(walletGridRef.current),
-      node: getGridCenter(nodeGridRef.current)
+      signer: signerMetrics.center,
+      wallet: walletMetrics.center,
+      node: nodeMetrics.center
     });
 
-    // 计算每列组件列表的实际宽度
     setColumnWidths({
-      signer: getGridWidth(signerGridRef.current),
-      wallet: getGridWidth(walletGridRef.current),
-      node: getGridWidth(nodeGridRef.current)
+      signer: signerMetrics.width,
+      wallet: walletMetrics.width,
+      node: nodeMetrics.width
+    });
+
+    // 计算箭头可用区：列边缘之间的间隙，预留安全距离
+    const safe = 24;
+    const lane1Left = signerMetrics.left !== undefined && signerMetrics.width !== undefined
+      ? signerMetrics.left + signerMetrics.width + safe
+      : undefined;
+    const lane1Right = walletMetrics.left !== undefined
+      ? walletMetrics.left - safe
+      : undefined;
+    const lane2Left = walletMetrics.left !== undefined && walletMetrics.width !== undefined
+      ? walletMetrics.left + walletMetrics.width + safe
+      : undefined;
+    const lane2Right = nodeMetrics.left !== undefined
+      ? nodeMetrics.left - safe
+      : undefined;
+
+    setLanePositions({
+      lane1: lane1Left !== undefined && lane1Right !== undefined
+        ? { left: lane1Left, width: Math.max(40, lane1Right - lane1Left) }
+        : undefined,
+      lane2: lane2Left !== undefined && lane2Right !== undefined
+        ? { left: lane2Left, width: Math.max(40, lane2Right - lane2Left) }
+        : undefined
     });
   };
 
@@ -127,7 +161,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     }
 
     // 监听网格元素尺寸变化
-    [signerGridRef.current, walletGridRef.current, nodeGridRef.current].forEach(gridEl => {
+    [signerGridRef.current, walletGridRef.current, nodeGridRef.current, layoutRef.current].forEach(gridEl => {
       if (gridEl) {
         ro.observe(gridEl);
         observeTargets.push(gridEl);
@@ -153,9 +187,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
 
   return (
     <main className="main-layout">
-      <div className="layout-container three-column">
-        
-        {/* 硬件签名器列 - 标题 + 网格（同一列容器内） */}
+      <div className="layout-container three-column" ref={layoutRef}>
+        {/* 硬件签名器列 */}
         <div className="component-column">
           <ColumnTitle title={COLUMN_TITLES.signer} ref={signerTitleRef} />
           <ComponentColumn
@@ -167,29 +200,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             ref={signerGridRef}
           />
         </div>
-        
-        <div className={`data-flow ${isNoSignerSelected() ? 'disabled' : ''}`}>
-          <div className="flow-arrow">
-            <span className="arrow">→</span>
-            <span className="flow-text">签名和公钥</span>
-          </div>
-          
-          {/* 传输方式标签区域 - 独立分隔两个箭头 */}
-          {/* 传输方式标签区域 - 始终显示，避免布局跳动 */}
-          <div className="transfer-methods">
-            {transferMethods.map((method, index) => (
-              <span key={index} className={`transfer-tag ${getTransferMethodClass(method)}`}>
-                {method}
-              </span>
-            ))}
-          </div>          
-          <div className="flow-arrow left-arrow">
-            <span className="arrow">←</span>
-            <span className="flow-text">待签名的交易</span>
-          </div>
-        </div>
-        
-        {/* 软件钱包列 - 标题 + 网格（同一列容器内） */}
+
+        {/* 软件钱包列 */}
         <div className="component-column">
           <ColumnTitle title={COLUMN_TITLES.wallet} ref={walletTitleRef} />
           <ComponentColumn
@@ -201,32 +213,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             ref={walletGridRef}
           />
         </div>
-        
-        <div 
-          className="data-flow" 
-          style={{
-            height: '300px',
-            minHeight: '300px',
-            maxHeight: '300px'
-          }}
-        >
-          <div className="flow-arrow">
-            <span className="arrow">→</span>
-            <span className="flow-text">地址；已签名交易</span>
-          </div>
-          
-          {/* 占位符区域 - 与左侧传输标签区域保持一致的视觉效果 */}
-          <div className="transfer-methods placeholder">
-            {/* 占位区域标签已隐藏，仅保留占位空间 */}
-          </div>
-          
-          <div className="flow-arrow left-arrow">
-            <span className="arrow">←</span>
-            <span className="flow-text">余额信息</span>
-          </div>
-        </div>
-        
-        {/* 区块链节点列 - 标题 + 网格（同一列容器内） */}
+
+        {/* 区块链节点列 */}
         <div className="component-column">
           <ColumnTitle title={COLUMN_TITLES.node} ref={nodeTitleRef} />
           <ComponentColumn
@@ -238,10 +226,50 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             ref={nodeGridRef}
           />
         </div>
+
+        {/* 箭头与传输方式的覆盖层，不再占用网格列 */}
+        <div
+          className={`flow-overlay ${isNoSignerSelected() ? 'disabled' : ''}`}
+          style={{
+            '--lane1-left': lanePositions.lane1 ? `${lanePositions.lane1.left}px` : undefined,
+            '--lane1-width': lanePositions.lane1 ? `${lanePositions.lane1.width}px` : undefined,
+            '--lane2-left': lanePositions.lane2 ? `${lanePositions.lane2.left}px` : undefined,
+            '--lane2-width': lanePositions.lane2 ? `${lanePositions.lane2.width}px` : undefined,
+            '--lane-forward-top': '36%',
+            '--lane-reverse-top': '56%',
+            '--lane-transfer-top': '46%'
+          } as React.CSSProperties}
+        >
+          {/* 方向：左 -> 右（硬件签名器 -> 软件钱包） */}
+          <span className="flow-track lane-forward gap-1" aria-hidden="true" />
+          <div className="flow-label-center lane-forward gap-1">签名和公钥</div>
+          {transferMethods.length > 0 && (
+            <div className="flow-transfer lane-forward gap-1">
+              {transferMethods.map((method, index) => (
+                <span key={index} className={`transfer-tag ${getTransferMethodClass(method)}`}>
+                  {method}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* 方向：右 -> 左（软件钱包 -> 硬件签名器） */}
+          <span className="flow-track lane-reverse gap-1" aria-hidden="true" />
+          <div className="flow-label-center lane-reverse gap-1">待签名的交易</div>
+
+          {/* 方向：左 -> 右（软件钱包 -> 区块链节点） */}
+          <span className="flow-track lane-forward gap-2" aria-hidden="true" />
+          <div className="flow-label-center lane-forward gap-2">地址；已签名交易</div>
+
+          {/* 方向：右 -> 左（区块链节点 -> 软件钱包） */}
+          <span className="flow-track lane-reverse gap-2" aria-hidden="true" />
+          <div className="flow-label-center lane-reverse gap-2">余额信息</div>
+        </div>
       </div>
       <BottomFeatureDock
         centers={centers}
         columnWidths={columnWidths}
+        layoutLeft={layoutLeft}
         selectedSigners={selectedSigners}
         selectedWallet={selectedWallet}
         selectedNode={selectedNode}
