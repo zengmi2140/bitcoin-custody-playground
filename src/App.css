@@ -381,7 +381,6 @@ body {
   margin: 0 auto;
   padding-inline: 20px;
   padding-top: 120px; /* 为顶部固定Header预留空间：Header高度约100px + 余量20px */
-  transform: translateX(30px);
 }
 
 .main-layout.loading {
@@ -411,7 +410,7 @@ body {
   grid-auto-rows: min-content;
   gap: clamp(36px, 6vw, 80px);
   width: 100%;
-  max-width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
   justify-items: center;
   justify-content: center;
