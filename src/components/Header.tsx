@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 interface HeaderProps {
   completionPercentage: number;
   onResetPreference: () => void;
+  onOpenFaq: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference }) => {
+const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference, onOpenFaq }) => {
   const [isMultiSigTooltipVisible, setIsMultiSigTooltipVisible] = useState(false);
   const getProgressColor = (percentage: number): string => {
     if (percentage === 0) return '#fbbf24';   // 黄色 - 空状态
@@ -49,23 +50,13 @@ const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference
         
         {/* 右上角按钮区域 */}
         <div className="header-actions">
-          <div className="signature-mode-selector">
-            <button className="signature-mode-button active">
-              单签
-            </button>
-            <button 
-              className="signature-mode-button disabled"
-              onMouseEnter={() => setIsMultiSigTooltipVisible(true)}
-              onMouseLeave={() => setIsMultiSigTooltipVisible(false)}
-            >
-              多签
-              {isMultiSigTooltipVisible && (
-                <div className="tooltip">
-                  等待上线
-                </div>
-              )}
-            </button>
-          </div>
+          <button 
+            className="faq-button"
+            onClick={onOpenFaq}
+            aria-label="查看 FAQ"
+          >
+            FAQ
+          </button>
           
           <button 
             className="reset-button"

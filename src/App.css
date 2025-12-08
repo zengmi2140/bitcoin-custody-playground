@@ -61,16 +61,40 @@ body {
 .header-actions {
   position: absolute;
   /* 定位到页面右侧，确保按钮完全可见 */
-  right: 10px; /* 减少右边距，确保按钮不被截断 */
+  right: 120px; /* 向左收紧至原单签/多签区域 */
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   gap: 12px;
   z-index: 10;
-  
-  /* 减少向左移动距离，避免按钮超出视窗 */
-  margin-right: -20px;
+}
+
+.faq-button {
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #1f2937;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  min-height: 36px;
+  min-width: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faq-button:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.faq-button:focus-visible {
+  outline: 2px solid #94a3b8;
+  outline-offset: 2px;
 }
 
 /* 单签/多签切换按钮 */
@@ -229,27 +253,135 @@ body {
   background: #6b7280;
   border: none;
   color: white;
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
   font-size: 14px;
   white-space: nowrap;
+  min-height: 36px;
+  min-width: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .reset-button:hover {
   background: #4b5563;
 }
 
+.faq-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 2000;
+}
+
+.faq-drawer {
+  width: min(520px, 92vw);
+  height: 100%;
+  background: #ffffff;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.1);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  animation: faqSlideIn 0.25s ease-out;
+}
+
+.faq-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  padding-bottom: 12px;
+  background: #ffffff;
+  z-index: 5;
+}
+
+.faq-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.faq-close {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.faq-close:hover {
+  background: #e2e8f0;
+}
+
+.faq-close:focus-visible {
+  outline: 2px solid #94a3b8;
+  outline-offset: 2px;
+}
+
+.faq-body {
+  overflow-y: auto;
+  padding-right: 6px;
+  margin-top: 4px;
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+.faq-body h2 {
+  font-size: 1rem;
+  margin: 16px 0 8px;
+  color: #0f172a;
+}
+
+.faq-body p {
+  margin: 0 0 12px;
+}
+
+.faq-body ul,
+.faq-body ol {
+  margin: 0 0 12px 20px;
+  padding: 0;
+}
+
+.faq-body li {
+  margin-bottom: 8px;
+}
+
+@keyframes faqSlideIn {
+  from {
+    transform: translateX(20%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 /* Main Layout 样式 */
 .main-layout {
   flex: 1;
-  padding: 40px 20px;
+  padding: 40px 0;
+  padding-bottom: 380px; /* 为底部固定特性框预留空间：特性框高度348px + 底部间距20px + 余量12px */
+  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  width: 100%;
+  padding-inline: 20px;
   padding-top: 120px; /* 为顶部固定Header预留空间：Header高度约100px + 余量20px */
-  padding-bottom: 380px; /* 为底部固定特性框预留空间：特性框高度348px + 底部间距20px + 余量12px */
+  transform: translateX(30px);
 }
 
 .main-layout.loading {
@@ -270,6 +402,7 @@ body {
   align-items: stretch;
   min-height: 600px;
   position: relative;
+  width: 100%;
 }
 
 .layout-container.three-column {
@@ -277,6 +410,12 @@ body {
   align-items: start;
   grid-auto-rows: min-content;
   gap: clamp(36px, 6vw, 80px);
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  justify-items: center;
+  justify-content: center;
+  grid-auto-flow: row;
 }
 
 .layout-container.two-column {
@@ -997,17 +1136,6 @@ body {
   }
 }
 
-
-/* 精确布局居中控制 - 确保左右空白区域完全相等 */
-.layout-container.three-column {
-  justify-items: center;
-  justify-content: center;
-  align-items: start;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  grid-auto-flow: row;
-}
 
 /* 确保组件列在网格中精确居中 */
 .component-column {

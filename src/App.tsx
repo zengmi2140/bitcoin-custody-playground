@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { UserPreference, ComponentState, CustodyData } from './types';
 import Header from './components/Header';
+import FaqDrawer from './components/FaqDrawer';
+import faqContent from './content/FAQ.md?raw';
 import MainLayout from './components/MainLayout';
 import InitialGuide from './components/InitialGuide';
 import './index.css';
@@ -26,6 +28,7 @@ function App() {
     custodyData: null,
     isLoading: true
   });
+  const [isFaqOpen, setIsFaqOpen] = useState(false);
 
   // 加载JSON数据
   useEffect(() => {
@@ -353,6 +356,14 @@ function App() {
     localStorage.setItem('userPreference', JSON.stringify(preference));
   };
 
+  const handleOpenFaq = () => {
+    setIsFaqOpen(true);
+  };
+
+  const handleCloseFaq = () => {
+    setIsFaqOpen(false);
+  };
+
   // 重置偏好
   const handleResetPreference = () => {
     setState(prev => ({
@@ -393,6 +404,7 @@ function App() {
       <Header 
         completionPercentage={getCompletionPercentage()}
         onResetPreference={handleResetPreference}
+        onOpenFaq={handleOpenFaq}
       />
       
       <MainLayout
@@ -404,7 +416,12 @@ function App() {
         onComponentClick={handleComponentClick}
         custodyData={state.custodyData}
       />
-      
+
+      <FaqDrawer 
+        isOpen={isFaqOpen}
+        onClose={handleCloseFaq}
+        content={faqContent}
+      />
     </div>
   );
 }
