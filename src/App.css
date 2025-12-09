@@ -1114,6 +1114,12 @@ body {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    align-items: center;
+  }
+
+  .mobile-feature-section .feature-box {
+    width: 100%;
+    max-width: 350px;
   }
 
   /* 移动端卡片居中 */
