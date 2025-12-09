@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import type { Components } from 'react-markdown';
 import ReactMarkdown from 'react-markdown';
 
 interface FaqDrawerProps {
@@ -6,6 +7,23 @@ interface FaqDrawerProps {
   onClose: () => void;
   content: string;
 }
+
+const markdownComponents: Components = {
+  h2: ({ children }) => (
+    <h2 className="faq-heading">
+      <span className="faq-heading-icon">Q</span>
+      <span className="faq-heading-text">{children}</span>
+    </h2>
+  ),
+  p: ({ children }) => <p className="faq-paragraph">{children}</p>,
+  ul: ({ children }) => <ul className="faq-list">{children}</ul>,
+  ol: ({ children }) => <ol className="faq-list faq-list-ordered">{children}</ol>,
+  li: ({ children }) => <li className="faq-list-item">{children}</li>,
+  blockquote: ({ children }) => (
+    <blockquote className="faq-quote">{children}</blockquote>
+  ),
+  strong: ({ children }) => <strong className="faq-strong">{children}</strong>
+};
 
 const FaqDrawer: React.FC<FaqDrawerProps> = ({ isOpen, onClose, content }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -60,7 +78,9 @@ const FaqDrawer: React.FC<FaqDrawerProps> = ({ isOpen, onClose, content }) => {
           </button>
         </div>
         <div className="faq-body">
-          <ReactMarkdown>{content}</ReactMarkdown>
+          <div className="faq-content">
+            <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+          </div>
         </div>
       </div>
     </div>
