@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { CustodyData, Feature } from '../types';
 
 interface BottomFeatureDockProps {
@@ -9,6 +10,7 @@ interface BottomFeatureDockProps {
   selectedWallet: string | null;
   selectedNode: string | null;
   custodyData: CustodyData;
+  offsetX?: number;
 }
 
 const renderFeatureItems = (features: Feature[]) => {
@@ -27,7 +29,8 @@ const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
   selectedSigners,
   selectedWallet,
   selectedNode,
-  custodyData
+  custodyData,
+  offsetX = 0
 }) => {
   const dockCommonStyle: React.CSSProperties = {
     position: 'fixed',
@@ -36,14 +39,14 @@ const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
     transform: 'translateX(-50%)'
   };
 
-  return (
+  const content = (
     <>
       {selectedSigners.length > 0 && centers.signer !== undefined && (
         <div
           className="feature-box signer"
           style={{ 
             ...dockCommonStyle, 
-            left: layoutLeft + centers.signer,
+            left: layoutLeft + centers.signer + offsetX,
             width: columnWidths.signer ? `${columnWidths.signer}px` : 'auto'
           }}
         >
@@ -62,7 +65,7 @@ const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
           className="feature-box wallet"
           style={{ 
             ...dockCommonStyle, 
-            left: layoutLeft + centers.wallet,
+            left: layoutLeft + centers.wallet + offsetX,
             width: columnWidths.wallet ? `${columnWidths.wallet}px` : 'auto'
           }}
         >
@@ -81,7 +84,7 @@ const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
           className="feature-box node"
           style={{ 
             ...dockCommonStyle, 
-            left: layoutLeft + centers.node,
+            left: layoutLeft + centers.node + offsetX,
             width: columnWidths.node ? `${columnWidths.node}px` : 'auto'
           }}
         >
@@ -96,6 +99,12 @@ const BottomFeatureDock: React.FC<BottomFeatureDockProps> = ({
       )}
     </>
   );
+
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  return createPortal(content, document.body);
 };
 
 export default BottomFeatureDock;
