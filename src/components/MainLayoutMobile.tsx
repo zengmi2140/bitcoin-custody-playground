@@ -1,7 +1,6 @@
 import React from 'react';
 import { UserPreference, ComponentState, CustodyData } from '../types';
 import ComponentColumn from './ComponentColumn';
-import ColumnTitle from './ColumnTitle';
 
 // 列标题常量（写死文案）
 const COLUMN_TITLES = {
@@ -73,6 +72,24 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
 
   const transferMethods = getTransferMethods();
 
+  const mobileTitleStyle: React.CSSProperties = {
+    position: 'static',
+    top: 'auto',
+    zIndex: 'auto',
+    background: 'transparent',
+    fontSize: '1.4rem',
+    fontWeight: 600,
+    color: '#2d3748',
+    textAlign: 'center',
+    margin: '0 0 10px 0',
+    padding: 0,
+    width: '100%',
+    display: 'grid',
+    placeItems: 'center',
+    gridTemplateColumns: '1fr',
+    boxSizing: 'border-box'
+  };
+
   // 对硬件签名器列表进行排序，确保"不使用签名器"始终在最后
   const sortedHardwareSigners = [...custodyData.hardwareSigners].sort((a, b) => {
     if (a.id === 'none' && b.id !== 'none') return 1;
@@ -117,7 +134,9 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
       <div className="layout-container three-column">
         {/* 硬件签名器列 */}
         <div className="component-column">
-          <ColumnTitle title={COLUMN_TITLES.signer} />
+          <h2 className="column-title" style={mobileTitleStyle}>
+            {COLUMN_TITLES.signer}
+          </h2>
           <ComponentColumn
             components={sortedHardwareSigners}
             selectedComponents={selectedSigners}
@@ -146,7 +165,9 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
 
         {/* 软件钱包列 */}
         <div className="component-column">
-          <ColumnTitle title={COLUMN_TITLES.wallet} />
+          <h2 className="column-title" style={mobileTitleStyle}>
+            {COLUMN_TITLES.wallet}
+          </h2>
           <ComponentColumn
             components={custodyData.softwareWallets}
             selectedComponents={selectedWallet ? [selectedWallet] : []}
@@ -166,7 +187,9 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
 
         {/* 区块链节点列 */}
         <div className="component-column">
-          <ColumnTitle title={COLUMN_TITLES.node} />
+          <h2 className="column-title" style={mobileTitleStyle}>
+            {COLUMN_TITLES.node}
+          </h2>
           <ComponentColumn
             components={custodyData.nodes}
             selectedComponents={selectedNode ? [selectedNode] : []}
