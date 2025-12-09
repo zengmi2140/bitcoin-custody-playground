@@ -975,7 +975,8 @@ body {
   border: 1px solid #e2e8f0;
   /* 移除 max-width: 350px; 让宽度完全由 JavaScript 控制 */
   flex: 1;
-  z-index: 20; /* 提升层级，确保悬浮层可见 */
+  position: relative; /* 允许控制 z-index */
+  z-index: 5; /* 低于 Header（z-index:20），避免遮挡 */
   height: 264px; /* 统一高度：标题+分割+列表(188)+上下内边距等 */
 }
 
