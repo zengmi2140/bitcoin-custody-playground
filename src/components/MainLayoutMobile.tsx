@@ -146,9 +146,13 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
           />
         </div>
 
-        {/* 移动端数据流指示器 (Signer -> Wallet) */}
+        {/* 移动端数据流指示器 (Signer ↔ Wallet) */}
         <div className="mobile-flow-indicator">
-          <div className="flow-arrow-down">↓</div>
+          <span className="flow-sub-label top" aria-label="软件钱包向签名器传递待签名交易">待签名交易</span>
+          <div className="mobile-flow-arrows" aria-label="硬件签名器与软件钱包双向数据流">
+            <span className="flow-arrow up">↑</span>
+            <span className="flow-arrow down">↓</span>
+          </div>
           <div className="flow-content">
             <span className="flow-label">签名和公钥</span>
             {transferMethods.length > 0 && (
@@ -177,9 +181,13 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
           />
         </div>
 
-        {/* 移动端数据流指示器 (Wallet -> Node) */}
+        {/* 移动端数据流指示器 (Wallet ↔ Node) */}
         <div className="mobile-flow-indicator">
-          <div className="flow-arrow-down">↓</div>
+          <span className="flow-sub-label top" aria-label="节点返回余额信息">余额信息</span>
+          <div className="mobile-flow-arrows" aria-label="软件钱包与区块链节点双向数据流">
+            <span className="flow-arrow up">↑</span>
+            <span className="flow-arrow down">↓</span>
+          </div>
           <div className="flow-content">
             <span className="flow-label">地址；已签名交易</span>
           </div>

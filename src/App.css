@@ -1050,18 +1050,42 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   margin: 10px 0;
   width: 100%;
   animation: floatDown 2s ease-in-out infinite;
 }
 
+.mobile-flow-arrows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fffaf0 0%, #ffffff 100%);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(247, 147, 26, 0.15);
+}
+
+.flow-arrow,
 .flow-arrow-down {
-  font-size: 24px;
+  font-size: 22px;
   color: #F7931A;
-  font-weight: bold;
+  font-weight: 700;
   height: 24px;
+  width: 24px;
   line-height: 24px;
+  text-align: center;
+}
+
+.flow-arrow.up {
+  transform: translateY(1px);
+}
+
+.flow-arrow.down {
+  transform: translateY(-1px);
 }
 
 .flow-content {
@@ -1076,6 +1100,18 @@ body {
   color: #F7931A;
   font-weight: 600;
 }
+
+.flow-sub-label {
+  font-size: 0.9rem;
+  color: #F7931A;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.flow-sub-label.top {
+  margin-bottom: 2px;
+}
+
 
 .flow-transfer-methods {
   display: flex;
