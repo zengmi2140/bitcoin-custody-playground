@@ -444,12 +444,18 @@ body {
 .main-layout {
   flex: 1;
   padding: 40px 0;
-  padding-bottom: 380px; /* 为底部固定特性框预留空间：特性框高度348px + 底部间距20px + 余量12px */
+  /* 桌面端为底部固定特性框预留空间 */
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding-inline: 20px;
   padding-top: 120px; /* 为顶部固定Header预留空间：Header高度约100px + 余量20px */
+}
+
+@media (min-width: 769px) {
+  .main-layout {
+    padding-bottom: 380px;
+  }
 }
 
 .main-layout.loading {
@@ -952,6 +958,50 @@ body {
   color: #d97706;
 }
 
+/* 移动端数据流指示器样式 */
+.mobile-flow-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+  width: 100%;
+  animation: floatDown 2s ease-in-out infinite;
+}
+
+.flow-arrow-down {
+  font-size: 24px;
+  color: #F7931A;
+  font-weight: bold;
+  height: 24px;
+  line-height: 24px;
+}
+
+.flow-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.flow-label {
+  font-size: 0.9rem;
+  color: #F7931A;
+  font-weight: 600;
+}
+
+.flow-transfer-methods {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@keyframes floatDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .bottom-features {
@@ -1092,6 +1142,7 @@ body {
   .header-actions {
     position: static;
     justify-content: center;
+    transform: none; /* 移除桌面端的垂直居中变换 */
   }
   
   .progress-section {
@@ -1254,6 +1305,3 @@ body {
     right: 20px; /* 保持右上角位置 */
   }
 }
-
-
-
