@@ -26,6 +26,14 @@ const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference
   return (
     <header className="header">
       <div className="header-content">
+        <div
+          className="site-title"
+          aria-label="比特币自主保管模拟器"
+          role="heading"
+          aria-level={1}
+        >
+          比特币自主保管模拟器
+        </div>
         {/* 中央进度条区域 */}
         <div className="progress-section">
           <div className={`progress-bar-container ${showGrayExtension ? 'extended' : ''}`}>
