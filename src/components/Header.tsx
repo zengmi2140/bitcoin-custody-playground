@@ -48,6 +48,17 @@ const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference
           )}
         </div>
         
+        {/* 左上角重置按钮 */}
+        <div className="header-actions-left">
+          <button 
+            className="reset-button"
+            onClick={onResetPreference}
+            title="重置偏好"
+          >
+            重置
+          </button>
+        </div>
+
         {/* 右上角按钮区域 */}
         <div className="header-actions">
           <button 
@@ -56,14 +67,6 @@ const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference
             aria-label="查看 FAQ"
           >
             FAQ
-          </button>
-          
-          <button 
-            className="reset-button"
-            onClick={onResetPreference}
-            title="重置偏好"
-          >
-            重置
           </button>
         </div>
       </div>
