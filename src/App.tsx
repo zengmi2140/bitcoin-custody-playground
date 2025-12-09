@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { UserPreference, ComponentState, CustodyData } from './types';
 import Header from './components/Header';
+import HeaderMobile from './components/HeaderMobile';
 import FaqDrawer from './components/FaqDrawer';
 import faqContent from './content/FAQ.md?raw';
 import MainLayout from './components/MainLayout';
 import InitialGuide from './components/InitialGuide';
+import { useIsMobile } from './hooks/useIsMobile';
 import './index.css';
 import './App.css';
 
@@ -29,6 +31,7 @@ function App() {
     isLoading: true
   });
   const [isFaqOpen, setIsFaqOpen] = useState(false);
+  const isMobile = useIsMobile(769);
 
   // 加载JSON数据
   useEffect(() => {
@@ -401,11 +404,19 @@ function App() {
         <InitialGuide onPreferenceSet={handlePreferenceSet} />
       )}
       
-      <Header 
-        completionPercentage={getCompletionPercentage()}
-        onResetPreference={handleResetPreference}
-        onOpenFaq={handleOpenFaq}
-      />
+      {isMobile ? (
+        <HeaderMobile
+          completionPercentage={getCompletionPercentage()}
+          onResetPreference={handleResetPreference}
+          onOpenFaq={handleOpenFaq}
+        />
+      ) : (
+        <Header 
+          completionPercentage={getCompletionPercentage()}
+          onResetPreference={handleResetPreference}
+          onOpenFaq={handleOpenFaq}
+        />
+      )}
       
       <MainLayout
         userPreference={state.userPreference}

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { UserPreference, ComponentState, CustodyData, Feature } from '../types';
+import React from 'react';
+import { UserPreference, ComponentState, CustodyData } from '../types';
 import ComponentColumn from './ComponentColumn';
 import ColumnTitle from './ColumnTitle';
-import MobileFeatureDrawer from './MobileFeatureDrawer';
 
 // 列标题常量（写死文案）
 const COLUMN_TITLES = {
@@ -30,17 +29,6 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
   onComponentClick,
   custodyData
 }) => {
-  // 移动端 Drawer 状态
-  const [drawerState, setDrawerState] = useState<{
-    isOpen: boolean;
-    title: string;
-    features: Feature[];
-  }>({
-    isOpen: false,
-    title: '',
-    features: []
-  });
-
   if (!userPreference) {
     return (
       <main className="main-layout loading">
@@ -50,45 +38,6 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
       </main>
     );
   }
-
-  // 包装点击事件，处理移动端 Drawer 逻辑
-  const handleComponentClick = (id: string, type: 'signer' | 'wallet' | 'node') => {
-    // 1. 执行原有的选择逻辑
-    onComponentClick(id, type);
-
-    let componentName = '';
-    let componentFeatures: Feature[] = [];
-
-    // 查找组件数据
-    if (type === 'signer') {
-      const signer = custodyData.hardwareSigners.find(s => s.id === id);
-      if (signer) {
-        componentName = signer.name;
-        componentFeatures = signer.features || [];
-      }
-    } else if (type === 'wallet') {
-      const wallet = custodyData.softwareWallets.find(w => w.id === id);
-      if (wallet) {
-        componentName = wallet.name;
-        componentFeatures = wallet.features || [];
-      }
-    } else if (type === 'node') {
-      const node = custodyData.nodes.find(n => n.id === id);
-      if (node) {
-        componentName = node.name;
-        componentFeatures = node.features || [];
-      }
-    }
-
-    // 如果找到了组件数据，打开 Drawer
-    if (componentName) {
-      setDrawerState({
-        isOpen: true,
-        title: componentName,
-        features: componentFeatures
-      });
-    }
-  };
 
   // 获取传输方式对应的CSS类名
   const getTransferMethodClass = (method: string): string => {
@@ -131,6 +80,38 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
     return 0;
   });
 
+  const signerFeatures = selectedSigners.flatMap(id => {
+    const signer = custodyData.hardwareSigners.find(s => s.id === id);
+    return signer ? signer.features : [];
+  });
+
+  const walletFeatures = selectedWallet
+    ? (custodyData.softwareWallets.find(w => w.id === selectedWallet)?.features || [])
+    : [];
+
+  const nodeFeatures = selectedNode
+    ? (custodyData.nodes.find(n => n.id === selectedNode)?.features || [])
+    : [];
+
+  const renderFeatureBox = (title: string, features: { type: 'positive' | 'negative' | 'warning'; text: string }[]) => {
+    if (!features.length) return null;
+    return (
+      <div className="feature-box">
+        <h4 className="feature-title">{title}</h4>
+        <div className="feature-list">
+          {features.map((feature, index) => (
+            <div key={index} className={`feature-item ${feature.type}`}>
+              <span className="feature-icon">
+                {feature.type === 'positive' ? '✅' : feature.type === 'negative' ? '❌' : '⚠️'}
+              </span>
+              <span className="feature-text">{feature.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <main className="main-layout">
       <div className="layout-container three-column">
@@ -141,7 +122,7 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
             components={sortedHardwareSigners}
             selectedComponents={selectedSigners}
             getComponentState={(id: string) => getComponentState(id, 'signer')}
-            onComponentClick={(id: string) => handleComponentClick(id, 'signer')}
+            onComponentClick={(id: string) => onComponentClick(id, 'signer')}
             type="signer"
           />
         </div>
@@ -170,7 +151,7 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
             components={custodyData.softwareWallets}
             selectedComponents={selectedWallet ? [selectedWallet] : []}
             getComponentState={(id: string) => getComponentState(id, 'wallet')}
-            onComponentClick={(id: string) => handleComponentClick(id, 'wallet')}
+            onComponentClick={(id: string) => onComponentClick(id, 'wallet')}
             type="wallet"
           />
         </div>
@@ -190,19 +171,17 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
             components={custodyData.nodes}
             selectedComponents={selectedNode ? [selectedNode] : []}
             getComponentState={(id: string) => getComponentState(id, 'node')}
-            onComponentClick={(id: string) => handleComponentClick(id, 'node')}
+            onComponentClick={(id: string) => onComponentClick(id, 'node')}
             type="node"
           />
         </div>
       </div>
 
-      {/* 移动端特性 Drawer */}
-      <MobileFeatureDrawer
-        isOpen={drawerState.isOpen}
-        onClose={() => setDrawerState(prev => ({ ...prev, isOpen: false }))}
-        title={drawerState.title}
-        features={drawerState.features}
-      />
+      <div className="mobile-feature-section">
+        {renderFeatureBox('硬件签名器特性', signerFeatures)}
+        {renderFeatureBox('软件钱包特性', walletFeatures)}
+        {renderFeatureBox('区块链节点特性', nodeFeatures)}
+      </div>
     </main>
   );
 };
