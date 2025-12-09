@@ -1137,7 +1137,6 @@ body {
 
 
 
-
 /* Initial Guide 样式 */
 .initial-guide-overlay {
   position: fixed;
@@ -1420,5 +1419,14 @@ body {
 @media (min-width: 769px) and (max-width: 1199px) {
   .header-actions {
     right: 20px; /* 保持右上角位置 */
+  }
+}
+
+/* 修复移动端选项列表不居中的问题 */
+@media (max-width: 768px) {
+  .component-column {
+    display: flex; /* 恢复为flex布局以确保在移动端正确居中 */
+    flex-direction: column;
+    align-items: center;
   }
 }
