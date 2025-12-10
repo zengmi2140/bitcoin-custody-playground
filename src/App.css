@@ -624,6 +624,13 @@ body {
   filter: grayscale(0.8);
 }
 
+.flow-track.disabled,
+.flow-label-center.disabled,
+.flow-transfer.disabled {
+  opacity: 0.35;
+  filter: grayscale(0.8);
+}
+
 .flow-lane {
   position: relative;
   position: absolute;

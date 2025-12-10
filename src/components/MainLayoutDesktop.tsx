@@ -79,6 +79,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     return selectedSigners.includes('none');
   };
 
+  const signerFlowDisabledClass = isNoSignerSelected() ? 'disabled' : '';
+
   const signerTitleRef = useRef<HTMLHeadingElement>(null);
   const walletTitleRef = useRef<HTMLHeadingElement>(null);
   const nodeTitleRef = useRef<HTMLHeadingElement>(null);
@@ -229,7 +231,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
 
         {/* 箭头与传输方式的覆盖层，不再占用网格列 */}
         <div
-          className={`flow-overlay ${isNoSignerSelected() ? 'disabled' : ''}`}
+          className="flow-overlay"
           style={{
             '--lane1-left': lanePositions.lane1 ? `${lanePositions.lane1.left}px` : undefined,
             '--lane1-width': lanePositions.lane1 ? `${lanePositions.lane1.width}px` : undefined,
@@ -241,10 +243,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           } as React.CSSProperties}
         >
           {/* 方向：左 -> 右（硬件签名器 -> 软件钱包） */}
-          <span className="flow-track lane-forward gap-1" aria-hidden="true" />
-          <div className="flow-label-center lane-forward gap-1">签名和公钥</div>
+          <span className={`flow-track lane-forward gap-1 ${signerFlowDisabledClass}`} aria-hidden="true" />
+          <div className={`flow-label-center lane-forward gap-1 ${signerFlowDisabledClass}`}>签名和公钥</div>
           {transferMethods.length > 0 && (
-            <div className="flow-transfer lane-forward gap-1">
+            <div className={`flow-transfer lane-forward gap-1 ${signerFlowDisabledClass}`}>
               {transferMethods.map((method, index) => (
                 <span key={index} className={`transfer-tag ${getTransferMethodClass(method)}`}>
                   {method}
@@ -254,8 +256,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           )}
 
           {/* 方向：右 -> 左（软件钱包 -> 硬件签名器） */}
-          <span className="flow-track lane-reverse gap-1" aria-hidden="true" />
-          <div className="flow-label-center lane-reverse gap-1">待签名的交易</div>
+          <span className={`flow-track lane-reverse gap-1 ${signerFlowDisabledClass}`} aria-hidden="true" />
+          <div className={`flow-label-center lane-reverse gap-1 ${signerFlowDisabledClass}`}>待签名的交易</div>
 
           {/* 方向：左 -> 右（软件钱包 -> 区块链节点） */}
           <span className="flow-track lane-forward gap-2" aria-hidden="true" />
