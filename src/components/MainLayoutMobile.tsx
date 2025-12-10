@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { UserPreference, ComponentState, CustodyData } from '../types';
 import ComponentColumn from './ComponentColumn';
 
@@ -129,6 +129,33 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
     );
   };
 
+  const flowSignerToWalletRef = useRef<HTMLDivElement | null>(null);
+  const flowWalletToNodeRef = useRef<HTMLDivElement | null>(null);
+  const featureSectionRef = useRef<HTMLDivElement | null>(null);
+  const SCROLL_OFFSET = 100;
+
+  const scrollToSection = (sectionRef: React.RefObject<HTMLDivElement>) => {
+    if (!sectionRef.current) return;
+    const rect = sectionRef.current.getBoundingClientRect();
+    const targetTop = window.scrollY + rect.top - SCROLL_OFFSET;
+    window.scrollTo({ top: targetTop, behavior: 'smooth' });
+  };
+
+  const handleSignerSelect = (id: string) => {
+    onComponentClick(id, 'signer');
+    scrollToSection(flowSignerToWalletRef);
+  };
+
+  const handleWalletSelect = (id: string) => {
+    onComponentClick(id, 'wallet');
+    scrollToSection(flowWalletToNodeRef);
+  };
+
+  const handleNodeSelect = (id: string) => {
+    onComponentClick(id, 'node');
+    scrollToSection(featureSectionRef);
+  };
+
   return (
     <main className="main-layout">
       <div className="layout-container three-column">
@@ -141,13 +168,13 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
             components={sortedHardwareSigners}
             selectedComponents={selectedSigners}
             getComponentState={(id: string) => getComponentState(id, 'signer')}
-            onComponentClick={(id: string) => onComponentClick(id, 'signer')}
+            onComponentClick={handleSignerSelect}
             type="signer"
           />
         </div>
 
         {/* 移动端数据流指示器 (Signer ↔ Wallet) */}
-        <div className="mobile-flow-indicator">
+        <div className="mobile-flow-indicator" ref={flowSignerToWalletRef}>
           <span className="flow-sub-label top" aria-label="软件钱包向签名器传递待签名交易">待签名交易</span>
           <div className="mobile-flow-arrows" aria-label="硬件签名器与软件钱包双向数据流">
             <span className="flow-arrow up">↑</span>
@@ -176,13 +203,13 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
             components={custodyData.softwareWallets}
             selectedComponents={selectedWallet ? [selectedWallet] : []}
             getComponentState={(id: string) => getComponentState(id, 'wallet')}
-            onComponentClick={(id: string) => onComponentClick(id, 'wallet')}
+            onComponentClick={handleWalletSelect}
             type="wallet"
           />
         </div>
 
         {/* 移动端数据流指示器 (Wallet ↔ Node) */}
-        <div className="mobile-flow-indicator">
+        <div className="mobile-flow-indicator" ref={flowWalletToNodeRef}>
           <span className="flow-sub-label top" aria-label="节点返回余额信息">余额信息</span>
           <div className="mobile-flow-arrows" aria-label="软件钱包与区块链节点双向数据流">
             <span className="flow-arrow up">↑</span>
@@ -202,13 +229,13 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
             components={custodyData.nodes}
             selectedComponents={selectedNode ? [selectedNode] : []}
             getComponentState={(id: string) => getComponentState(id, 'node')}
-            onComponentClick={(id: string) => onComponentClick(id, 'node')}
+            onComponentClick={handleNodeSelect}
             type="node"
           />
         </div>
       </div>
 
-      <div className="mobile-feature-section">
+      <div className="mobile-feature-section" ref={featureSectionRef}>
         {renderFeatureBox('硬件签名器特性', signerFeatures)}
         {renderFeatureBox('软件钱包特性', walletFeatures)}
         {renderFeatureBox('区块链节点特性', nodeFeatures)}
