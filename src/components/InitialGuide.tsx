@@ -28,7 +28,7 @@ const InitialGuide: React.FC<InitialGuideProps> = ({ onPreferenceSet }) => {
       <div className="initial-guide">
         {step === 'device' && (
           <div className="guide-step">
-            <h2>欢迎使用比特币自主托管交互网站</h2>
+            <h2>欢迎使用比特币自主保管模拟器</h2>
             <p>首先，请告诉我们您主要使用什么设备来管理比特币：</p>
             
             <div className="choice-cards">
