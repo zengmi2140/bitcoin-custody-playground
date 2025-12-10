@@ -731,7 +731,7 @@ body {
   min-height: 32px;
   padding: 6px 8px;
   z-index: 5;
-  background: rgba(255, 255, 255, 0.9);
+  background: transparent;
   border-radius: 16px;
 }
 
