@@ -5,7 +5,7 @@
 ## 技术栈
 - React 18 + TypeScript
 - Vite 5
-- TailwindCSS 4
+- TailwindCSS 3
 
 ## 核心功能
 - 三列布局：硬件签名器 / 软件钱包 / 区块链节点
