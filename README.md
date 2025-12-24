@@ -16,7 +16,7 @@
 ## 快速开始
 ```bash
 npm install
-npm run dev   # 默认端口 8080
+npm run dev   # 默认端口 5173
 npm run build
 npm run preview
 ```
