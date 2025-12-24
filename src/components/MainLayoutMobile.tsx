@@ -196,8 +196,9 @@ const MainLayoutMobile: React.FC<MainLayoutMobileProps> = ({
 
         {/* 软件钱包列 */}
         <div className="component-column">
-          <h2 className="column-title" style={mobileTitleStyle}>
+          <h2 className="column-title" style={{ ...mobileTitleStyle, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
             {COLUMN_TITLES.wallet}
+            {userPreference.deviceType === 'mobile' ? '📱' : '💻'}
           </h2>
           <ComponentColumn
             components={custodyData.softwareWallets}

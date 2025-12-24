@@ -31,6 +31,7 @@ function App() {
     isLoading: true
   });
   const [isFaqOpen, setIsFaqOpen] = useState(false);
+  const [layoutBounds, setLayoutBounds] = useState<{ leftEdge: number; rightEdge: number } | null>(null);
   const isMobile = useIsMobile(769);
 
   // 加载JSON数据
@@ -415,6 +416,8 @@ function App() {
           completionPercentage={getCompletionPercentage()}
           onResetPreference={handleResetPreference}
           onOpenFaq={handleOpenFaq}
+          layoutLeftEdge={layoutBounds?.leftEdge}
+          layoutRightEdge={layoutBounds?.rightEdge}
         />
       )}
       
@@ -426,6 +429,7 @@ function App() {
         getComponentState={getComponentState}
         onComponentClick={handleComponentClick}
         custodyData={state.custodyData}
+        onLayoutMeasured={setLayoutBounds}
       />
 
       <FaqDrawer 

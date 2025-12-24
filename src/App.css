@@ -72,13 +72,14 @@ body {
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 800px;
+  /* 当有内联样式时，上面的 left/transform/width 会被覆盖 */
 }
 
-/* 右上角按钮区域 */
+/* 左侧按钮区域 - 与硬件签名器列左侧对齐 */
 .header-actions-left {
   position: absolute;
-  left: calc(50% - var(--progress-half-width) - var(--actions-gap-from-progress)); /* 与进度条左端固定距离 */
-  top: 80%;
+  left: 20px; /* 默认值，会被内联样式覆盖 */
+  top: 71%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
@@ -86,10 +87,11 @@ body {
   z-index: 10;
 }
 
+/* 右侧按钮区域 - 与区块链节点列右侧对齐 */
 .header-actions {
   position: absolute;
-  right: calc(50% - var(--progress-half-width) - var(--actions-gap-from-progress)); /* 与进度条右端固定距离 */
-  top: 80%;
+  right: 20px; /* 默认值，会被内联样式覆盖 */
+  top: 71%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
@@ -556,10 +558,9 @@ body {
 .main-layout {
   flex: 1;
   padding: 40px 0;
-  /* 桌面端为底部固定特性框预留空间 */
+  display: flex;
+  justify-content: center;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
   padding-inline: 20px;
   padding-top: 120px; /* 为顶部固定Header预留空间：Header高度约100px + 余量20px */
 }
@@ -567,8 +568,6 @@ body {
 @media (min-width: 769px) {
   .main-layout {
     padding-bottom: 380px;
-    width: calc(100% - 60px); /* 桌面端整体向右偏移时避免横向溢出 */
-    transform: translateX(60px); /* 仅桌面端右移 60px 对齐 Header */
   }
 }
 
@@ -590,18 +589,15 @@ body {
   align-items: stretch;
   min-height: 600px;
   position: relative;
-  width: 100%;
 }
 
 .layout-container.three-column {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 260px); /* 三列固定宽度 */
   align-items: start;
   grid-auto-rows: min-content;
-  gap: clamp(36px, 6vw, 80px);
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  justify-items: center;
+  gap: clamp(80px, 12vw, 240px); /* 最窄80px，最宽240px */
+  width: auto; /* 由内容决定宽度 */
+  max-width: 100%;
   justify-content: center;
   grid-auto-flow: row;
 }
@@ -856,9 +852,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   gap: 20px;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
+  width: 260px; /* 固定宽度确保三列对称 */
   padding: 0;
   box-sizing: border-box;
 }

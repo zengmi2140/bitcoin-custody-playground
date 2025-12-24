@@ -4,10 +4,44 @@ interface HeaderProps {
   completionPercentage: number;
   onResetPreference: () => void;
   onOpenFaq: () => void;
+  layoutLeftEdge?: number;
+  layoutRightEdge?: number;
 }
 
-const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference, onOpenFaq }) => {
+const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference, onOpenFaq, layoutLeftEdge, layoutRightEdge }) => {
   const [isMultiSigTooltipVisible, setIsMultiSigTooltipVisible] = useState(false);
+  
+  // 进度条动态宽度计算（保持居中）
+  const GAP_FROM_BUTTONS = 24; // 进度条与按钮之间的间隙（像素）
+  const BUTTON_WIDTH = 72; // 按钮的大致宽度（像素）
+  
+  const calculateProgressMaxWidth = (): number | null => {
+    if (layoutLeftEdge === undefined || layoutRightEdge === undefined) {
+      return null; // 使用默认样式
+    }
+    
+    // 页面中心点
+    const pageCenter = window.innerWidth / 2;
+    
+    // 左侧按钮右边界
+    const leftButtonRight = layoutLeftEdge + BUTTON_WIDTH + GAP_FROM_BUTTONS;
+    // 右侧按钮左边界
+    const rightButtonLeft = layoutRightEdge - BUTTON_WIDTH - GAP_FROM_BUTTONS;
+    
+    // 从页面中心到左侧的可用距离
+    const leftHalfSpace = pageCenter - leftButtonRight;
+    // 从页面中心到右侧的可用距离
+    const rightHalfSpace = rightButtonLeft - pageCenter;
+    
+    // 取较小值作为半宽度，保证两侧都不超出
+    const halfWidth = Math.min(leftHalfSpace, rightHalfSpace);
+    
+    // 进度条总宽度，最小200px，最大800px
+    return Math.min(Math.max(halfWidth * 2, 200), 800);
+  };
+
+  const progressMaxWidth = calculateProgressMaxWidth();
+  
   const getProgressColor = (percentage: number): string => {
     if (percentage === 0) return '#fbbf24';   // 黄色 - 空状态
     if (percentage === 50) return '#ffcc80';  // 更浅橙色 - 仅选择硬件签名器
@@ -25,6 +59,34 @@ const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference
 
   return (
     <header className="header">
+      {/* 左侧重置按钮 - 直接在 header 层级，相对于视口定位 */}
+      <div 
+        className="header-actions-left"
+        style={layoutLeftEdge !== undefined ? { left: `${layoutLeftEdge}px` } : undefined}
+      >
+        <button 
+          className="reset-button"
+          onClick={onResetPreference}
+          title="重置偏好"
+        >
+          重置
+        </button>
+      </div>
+
+      {/* 右侧 FAQ 按钮 - 直接在 header 层级，相对于视口定位 */}
+      <div 
+        className="header-actions"
+        style={layoutRightEdge !== undefined ? { right: `calc(100% - ${layoutRightEdge}px)` } : undefined}
+      >
+        <button 
+          className="faq-button"
+          onClick={onOpenFaq}
+          aria-label="查看 FAQ"
+        >
+          FAQ
+        </button>
+      </div>
+
       <div className="header-content">
         <div
           className="site-title"
@@ -35,7 +97,10 @@ const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference
           比特币自主保管模拟器
         </div>
         {/* 中央进度条区域 */}
-        <div className="progress-section">
+        <div 
+          className="progress-section" 
+          style={progressMaxWidth ? { maxWidth: `${progressMaxWidth}px` } : undefined}
+        >
           <div className={`progress-bar-container ${showGrayExtension ? 'extended' : ''}`}>
             <div 
               className={`progress-bar ${completionPercentage === 100 ? 'at-hundred' : ''}`}
@@ -54,28 +119,6 @@ const Header: React.FC<HeaderProps> = ({ completionPercentage, onResetPreference
               🎉
             </div>
           )}
-        </div>
-        
-        {/* 左上角重置按钮 */}
-        <div className="header-actions-left">
-          <button 
-            className="reset-button"
-            onClick={onResetPreference}
-            title="重置偏好"
-          >
-            重置
-          </button>
-        </div>
-
-        {/* 右上角按钮区域 */}
-        <div className="header-actions">
-          <button 
-            className="faq-button"
-            onClick={onOpenFaq}
-            aria-label="查看 FAQ"
-          >
-            FAQ
-          </button>
         </div>
       </div>
     </header>

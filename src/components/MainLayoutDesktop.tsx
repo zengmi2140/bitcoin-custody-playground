@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 import { UserPreference, ComponentState, CustodyData } from '../types';
 import ComponentColumn from './ComponentColumn';
 import ColumnTitle from './ColumnTitle';
+import BottomFeatureDock from './BottomFeatureDock';
 
 // 列标题常量（写死文案）
 const COLUMN_TITLES = {
@@ -9,7 +10,6 @@ const COLUMN_TITLES = {
   wallet: '软件钱包',
   node: '区块链节点',
 } as const;
-import BottomFeatureDock from './BottomFeatureDock';
 
 interface MainLayoutProps {
   userPreference: UserPreference | null;
@@ -19,6 +19,7 @@ interface MainLayoutProps {
   getComponentState: (componentId: string, type: 'signer' | 'wallet' | 'node') => ComponentState;
   onComponentClick: (componentId: string, type: 'signer' | 'wallet' | 'node') => void;
   custodyData: CustodyData;
+  onLayoutMeasured?: (bounds: { leftEdge: number; rightEdge: number }) => void;
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({
@@ -28,7 +29,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   selectedNode,
   getComponentState,
   onComponentClick,
-  custodyData
+  custodyData,
+  onLayoutMeasured
 }) => {
   if (!userPreference) {
     return (
@@ -150,6 +152,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         ? { left: lane2Left, width: Math.max(40, lane2Right - lane2Left) }
         : undefined
     });
+
+    // 计算并传递布局边界给父组件
+    if (onLayoutMeasured && layoutRect && signerMetrics.left !== undefined && nodeMetrics.left !== undefined && nodeMetrics.width !== undefined) {
+      const leftEdge = layoutRect.left + signerMetrics.left;
+      const rightEdge = layoutRect.left + nodeMetrics.left + nodeMetrics.width;
+      onLayoutMeasured({ leftEdge, rightEdge });
+    }
   };
 
   useLayoutEffect(() => {
@@ -205,7 +214,11 @@ const MainLayout: React.FC<MainLayoutProps> = ({
 
         {/* 软件钱包列 */}
         <div className="component-column">
-          <ColumnTitle title={COLUMN_TITLES.wallet} ref={walletTitleRef} />
+          <ColumnTitle 
+            title={COLUMN_TITLES.wallet} 
+            ref={walletTitleRef}
+            icon={userPreference.deviceType === 'mobile' ? '📱' : '💻'}
+          />
           <ComponentColumn
             components={custodyData.softwareWallets}
             selectedComponents={selectedWallet ? [selectedWallet] : []}

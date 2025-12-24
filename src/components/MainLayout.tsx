@@ -12,6 +12,7 @@ interface MainLayoutProps {
   getComponentState: (componentId: string, type: 'signer' | 'wallet' | 'node') => ComponentState;
   onComponentClick: (componentId: string, type: 'signer' | 'wallet' | 'node') => void;
   custodyData: CustodyData;
+  onLayoutMeasured?: (bounds: { leftEdge: number; rightEdge: number }) => void;
 }
 
 const MainLayout: React.FC<MainLayoutProps> = (props) => {
