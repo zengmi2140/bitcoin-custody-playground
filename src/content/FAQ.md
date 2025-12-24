@@ -58,5 +58,5 @@
 
 完全不会，它没有收集数据的模块。网站的代码已经开源，用户可以下载源代码，在本地离线使用此工具。具体运行方式见 Readme.md 文档。
 
-代码仓库地址：https://github.com/zengmi2140/soft-hard-wallet
+代码仓库地址：[https://github.com/zengmi2140/soft-hard-wallet](https://github.com/zengmi2140/bitcoin-custody-playground)
 
